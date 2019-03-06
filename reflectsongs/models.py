@@ -45,11 +45,18 @@ class Setlist(ModelBase):
     """
     class Meta:
         ordering = ('-date', )
+        unique_together = (
+            ('date', 'name', 'site', ),
+        )
 
     def __str__(self):
         return str(self.date)
 
     date = models.DateField()
+    name = models.CharField(
+        max_length=200,
+        null=True,
+    )
     site = models.ForeignKey(
         Site,
         on_delete=models.CASCADE,

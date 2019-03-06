@@ -14,6 +14,7 @@ class SetlistAdmin(admin.ModelAdmin):
         '__str__',
         'site',
         'date',
+        'name',
     )
 
     list_filter = (
