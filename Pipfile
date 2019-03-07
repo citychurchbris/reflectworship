@@ -6,8 +6,8 @@ name = "pypi"
 [packages]
 lxml = "*"
 django = "==2.1.5"
-dateutil = "*"
 python-dateutil = "*"
+django-easy-select2 = "*"
 
 [dev-packages]
 

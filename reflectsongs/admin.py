@@ -1,5 +1,9 @@
+from django import forms
 from django.contrib import admin
 from django.db.models import Count
+
+from easy_select2 import Select2Multiple
+
 from reflectsongs.models import Setlist, Site, Song
 
 
@@ -8,8 +12,17 @@ class SiteAdmin(admin.ModelAdmin):
     pass
 
 
+class SetlistForm(forms.ModelForm):
+
+    class Meta:
+        widgets = {
+            'songs': Select2Multiple(),
+        }
+
+
 @admin.register(Setlist)
 class SetlistAdmin(admin.ModelAdmin):
+    form = SetlistForm
     list_display = (
         '__str__',
         'site',
@@ -24,7 +37,6 @@ class SetlistAdmin(admin.ModelAdmin):
 
 @admin.register(Song)
 class SongAdmin(admin.ModelAdmin):
-
     list_display = (
         '__str__',
         'play_count',
