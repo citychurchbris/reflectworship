@@ -50,11 +50,18 @@ class Setlist(ModelBase):
         )
 
     def __str__(self):
-        return str(self.date)
+        value = '{}: {}'.format(
+            str(self.date),
+            self.site,
+        )
+        if self.name:
+            value += ' ({})'.format(self.name)
+        return value
 
     date = models.DateField()
     name = models.CharField(
         max_length=200,
+        blank=True,
         null=True,
     )
     site = models.ForeignKey(
