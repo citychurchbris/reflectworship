@@ -1,7 +1,10 @@
+from django.core.management.base import BaseCommand
+from django.db.utils import IntegrityError
+
 from dateutil import parser as date_parser
 from dateutil import relativedelta
-from django.core.management.base import BaseCommand
 from lxml import etree
+
 from reflectsongs.models import Setlist, Site, Song
 
 EXCLUDE = (
@@ -74,11 +77,17 @@ class Command(BaseCommand):
 
     def process_playlists(self, playlists, site):
         for playlist in playlists:
-            setlist = Setlist.objects.create(
-                site=site,
-                name=playlist['name'],
-                date=playlist['date'],
-            )
+            try:
+                setlist = Setlist.objects.create(
+                    site=site,
+                    name=playlist['name'],
+                    date=playlist['date'],
+                )
+            except IntegrityError:
+                # Already exists - skip
+                print('Skipping: {}'.format(playlist['name']))
+                continue
+
             print('Created setlist: {}'.format(setlist))
             for songname in playlist['songs']:
                 song, _ = Song.objects.get_or_create(
