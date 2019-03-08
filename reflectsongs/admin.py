@@ -52,3 +52,4 @@ class SongAdmin(admin.ModelAdmin):
     def play_count(self, obj):
         return obj._setlist_count
     play_count.admin_order_field = '_setlist_count'
+admin.site.site_header = 'Reflect Worship Database'
