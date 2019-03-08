@@ -27,15 +27,16 @@ class SetlistForm(forms.ModelForm):
 @admin.register(Setlist)
 class SetlistAdmin(admin.ModelAdmin):
     form = SetlistForm
+    date_hierarchy = 'date'
     list_display = (
         '__str__',
         'site',
         'date',
         'name',
     )
-
     list_filter = (
         'site',
+        'date',
     )
 
 
@@ -51,6 +52,7 @@ class SongAdmin(admin.ModelAdmin):
     )
     list_filter = (
         SiteSongFilter,
+        'setlists__date',
     )
 
     readonly_fields = (
@@ -65,13 +67,21 @@ class SongAdmin(admin.ModelAdmin):
         # Filter setlist count by site
         siteid = request.GET.get('site')
         if siteid:
-            sitefil = Q(setlists__site=siteid)
+            subfil = Q(setlists__site=siteid)
         else:
-            sitefil = None
+            subfil = Q()
+        setlistdate_max = request.GET.get('setlists__date__lt')
+        setlistdate_min = request.GET.get('setlists__date__gte')
+        if setlistdate_max:
+            datefil = Q(setlists__date__lte=setlistdate_max,
+                        setlists__date__gte=setlistdate_min)
+        else:
+            datefil = Q()
 
         queryset = queryset.annotate(
-            _setlist_count=Count('setlists', distinct=True, filter=sitefil),
-            _last_played=Max("setlists__date", filter=sitefil),
+            _setlist_count=Count('setlists', distinct=True,
+                                 filter=subfil & datefil),
+            _last_played=Max("setlists__date", filter=subfil),
         )
         return queryset
 
