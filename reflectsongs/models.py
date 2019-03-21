@@ -1,6 +1,11 @@
 import uuid
 
 from django.db import models
+from django.utils.translation import gettext as _
+
+from reflectsongs.utils import url_to_link
+
+SONGSELECT_BASE_URL = 'https://songselect.ccli.com/Songs/'
 
 
 class ModelBase(models.Model):
@@ -37,6 +42,30 @@ class Song(ModelBase):
     title = models.CharField(
         max_length=200,
     )
+
+    authors = models.CharField(
+        max_length=200,
+    )
+
+    ccli_number = models.CharField(
+        _('CCLI Number'),
+        max_length=200,
+    )
+
+    @property
+    def songselect_url(self):
+        if self.ccli_number:
+            return SONGSELECT_BASE_URL + self.ccli_number
+        else:
+            return ''
+
+    @property
+    def songselect_link(self):
+        if self.ccli_number:
+            return url_to_link(self.songselect_url)
+        else:
+            return ''
+    songselect_link.fget.short_description = _('SongSelect Link')
 
 
 class Setlist(ModelBase):
