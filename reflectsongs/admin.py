@@ -44,9 +44,11 @@ class SetlistAdmin(admin.ModelAdmin):
 class SongAdmin(admin.ModelAdmin):
     search_fields = (
         'title',
+        'authors',
     )
     list_display = (
         'title',
+        'copyright_year',
         'play_count',
         'last_played',
     )

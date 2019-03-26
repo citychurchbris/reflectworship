@@ -8,6 +8,8 @@ lxml = "*"
 django = "==2.1.7"
 python-dateutil = "*"
 django-easy-select2 = "*"
+requests = "*"
+beautifulsoup4 = "*"
 
 [dev-packages]
 

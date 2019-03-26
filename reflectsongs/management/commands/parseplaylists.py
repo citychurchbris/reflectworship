@@ -18,7 +18,7 @@ EXCLUDE_LOWER = [x.lower() for x in EXCLUDE]
 
 
 class Command(BaseCommand):
-    help = 'Closes the specified poll for voting'
+    help = 'Imports playlists from ProPresenter'
 
     def add_arguments(self, parser):
         parser.add_argument('playlist_filename')

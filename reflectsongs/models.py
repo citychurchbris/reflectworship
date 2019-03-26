@@ -47,9 +47,19 @@ class Song(ModelBase):
         max_length=200,
     )
 
+    copyright_year = models.IntegerField(
+        blank=True,
+        null=True,
+    )
+
     ccli_number = models.CharField(
         _('CCLI Number'),
         max_length=200,
+    )
+
+    youtube_url = models.URLField(
+        blank=True,
+        null=True,
     )
 
     @property
