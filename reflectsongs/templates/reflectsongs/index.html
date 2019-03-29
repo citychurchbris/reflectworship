@@ -2,25 +2,58 @@
 
 {% block content %}
 
-<h1>Top Songs</h1>
-<table class="table">
-  <thead class="thead-light">
-    <th>Song</th>
-    <th>Setlist Count</th>
-    <th>Last Played</th>
-  </thead>
-  {% for song in topsongs %}
-  <tr>
-    <td>
-      <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
-    </td>
-    <td>
-      {{ song.setlist_count }}
-    </td>
-    <td>
-      {{ song.last_played }}
-    </td>
-  </tr>
-  {% endfor %}
-</table>
+<div class="card-deck">
+
+  <div class="card">
+    <h5 class="card-header">Top Songs</h5>
+    <div class="card-body">
+      <p>
+        Most frequently played songs in the last 6 months
+      </p>
+      <table class="table table-striped">
+        <thead>
+          <th>Song</th>
+          <th>Plays</th>
+        </thead>
+        {% for song in topsongs %}
+        <tr>
+          <td>
+            <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
+          </td>
+          <td>
+            {{ song.setlist_count }}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h5 class="card-header">New Songs</h5>
+    <div class="card-body">
+      <p>
+        Newest songs by copyright date
+      </p>
+      <table class="table table-striped">
+        <thead>
+          <th>Song</th>
+          <th>First play</th>
+        </thead>
+        {% for song in newsongs %}
+        <tr>
+          <td>
+            <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
+          </td>
+          <td>
+            {{ song.copyright_year }}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+</div>
+
 {% endblock %}

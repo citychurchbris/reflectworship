@@ -68,6 +68,11 @@ class Song(ModelBase):
     )
 
     @property
+    def last_played(self):
+        if self.setlists.count():
+            return self.setlists.order_by('-date').first().date
+
+    @property
     def songselect_url(self):
         if self.ccli_number:
             return SONGSELECT_BASE_URL + self.ccli_number

@@ -13,15 +13,17 @@ class HomeView(View):
         queryset = queryset.annotate(
             setlist_count=Count('setlists', distinct=True),
             last_played=Max("setlists__date"),
-        ).order_by('-setlist_count')
+        )
 
-        topsongs = queryset[:10]
+        topsongs = queryset.order_by('-setlist_count')[:10]
+        newsongs = queryset.order_by('-copyright_year')[:10]
 
         return render(
             request,
             'reflectsongs/index.html',
             context={
                 'topsongs': topsongs,
+                'newsongs': newsongs,
             }
         )
 
