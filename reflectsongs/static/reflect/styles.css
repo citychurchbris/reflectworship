@@ -1,0 +1,13 @@
+.container {
+  max-width: 960px;
+}
+
+h1, h2 {
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+#content {
+    margin-top: 1em;
+}
