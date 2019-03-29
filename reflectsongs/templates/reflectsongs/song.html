@@ -1,0 +1,15 @@
+{% extends 'reflectsongs/base.html' %}
+
+{% block content %}
+<h1>
+{{ song.title }}
+</h1>
+<p>
+Authors: {{ song.authors }}
+</p>
+<p>
+Year: {{ song.copyright_year }}
+</p>
+{{ embed_code }}
+<iframe src="https://www.youtube.com/embed/FVygdWkcoMc" class="noBorder" allowfullscreen>
+  {% endblock %}
