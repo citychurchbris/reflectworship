@@ -71,9 +71,10 @@ class SongAdmin(admin.ModelAdmin):
         # Filter setlist count by site
         siteid = request.GET.get('site')
         if siteid:
-            subfil = Q(setlists__site=siteid)
+            sitefil = Q(setlists__site=siteid)
         else:
-            subfil = Q()
+            sitefil = Q()
+
         setlistdate_max = request.GET.get('setlists__date__lt')
         setlistdate_min = request.GET.get('setlists__date__gte')
         if setlistdate_max:
@@ -84,8 +85,8 @@ class SongAdmin(admin.ModelAdmin):
 
         queryset = queryset.annotate(
             _setlist_count=Count('setlists', distinct=True,
-                                 filter=subfil & datefil),
-            _last_played=Max("setlists__date", filter=subfil),
+                                 filter=sitefil & datefil),
+            _last_played=Max("setlists__date", filter=sitefil),
         )
         return queryset
 
