@@ -3,7 +3,7 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext as _
 
-from reflectsongs.utils import url_to_link
+from reflectsongs.utils import unique_slugify, url_to_link
 
 SONGSELECT_BASE_URL = 'https://songselect.ccli.com/Songs/'
 
@@ -43,6 +43,11 @@ class Song(ModelBase):
         max_length=200,
     )
 
+    slug = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+
     authors = models.CharField(
         max_length=200,
     )
@@ -76,6 +81,10 @@ class Song(ModelBase):
         else:
             return ''
     songselect_link.fget.short_description = _('SongSelect Link')
+
+    def save(self, **kwargs):
+        unique_slugify(self, self.title)
+        super().save(**kwargs)
 
 
 class Setlist(ModelBase):

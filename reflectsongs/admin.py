@@ -58,6 +58,7 @@ class SongAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = (
+        'slug',
         'songselect_link',
         'play_count',
         'last_played',
