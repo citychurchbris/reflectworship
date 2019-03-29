@@ -1,8 +1,24 @@
 {% extends 'reflectsongs/base.html' %}
 
 {% block content %}
-
-<p>
-  Home
-</p>
+<table class="table">
+  <thead class="thead-light">
+    <th>Song</th>
+    <th>Setlist Count</th>
+    <th>Last Played</th>
+  </thead>
+  {% for song in topsongs %}
+  <tr>
+    <td>
+      <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
+    </td>
+    <td>
+      {{ song.setlist_count }}
+    </td>
+    <td>
+      {{ song.last_played }}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
 {% endblock %}

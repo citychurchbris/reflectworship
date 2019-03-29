@@ -1,3 +1,4 @@
+from django.db.models import Count, Max
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 
@@ -8,9 +9,20 @@ from reflectsongs.utils import yt_embed
 class HomeView(View):
 
     def get(self, request):
+        queryset = Song.objects.all()
+        queryset = queryset.annotate(
+            setlist_count=Count('setlists', distinct=True),
+            last_played=Max("setlists__date"),
+        ).order_by('-setlist_count')
+
+        topsongs = queryset[:10]
+
         return render(
             request,
             'reflectsongs/index.html',
+            context={
+                'topsongs': topsongs,
+            }
         )
 
 
