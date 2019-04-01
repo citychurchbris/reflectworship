@@ -1,4 +1,4 @@
-from django.db.models import Count, Max
+from django.db.models import Count
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 
@@ -12,7 +12,6 @@ class HomeView(View):
         queryset = Song.objects.all()
         queryset = queryset.annotate(
             setlist_count=Count('setlists', distinct=True),
-            last_played=Max("setlists__date"),
         )
 
         topsongs = queryset.order_by('-setlist_count')[:10]
