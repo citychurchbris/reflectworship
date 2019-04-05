@@ -24,6 +24,7 @@
      role="button">SongSelect</a>
 </p>
 {% endif %}
+{% if song.youtube_url %}
 <div class="card" style="max-width: 500px">
   <h5 class="card-header">Video</h5>
   <div class="card-body">
@@ -32,4 +33,5 @@
     </div>
   </div>
 </div>
+{% endif %}
 {% endblock %}
