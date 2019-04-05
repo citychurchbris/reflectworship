@@ -1,6 +1,8 @@
 import uuid
 
+from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from reflectsongs.utils import unique_slugify, url_to_link
@@ -73,6 +75,11 @@ class Song(ModelBase):
             return self.setlists.order_by('-date').first().date
 
     @property
+    def first_played(self):
+        if self.setlists.count():
+            return self.setlists.order_by('-date').last().date
+
+    @property
     def songselect_url(self):
         if self.ccli_number:
             return SONGSELECT_BASE_URL + self.ccli_number
@@ -86,6 +93,10 @@ class Song(ModelBase):
         else:
             return ''
     songselect_link.fget.short_description = _('SongSelect Link')
+
+    @property
+    def view_url(self):
+        return settings.ROOT_URL + reverse('song-view', args=(self.slug, ))
 
     def save(self, **kwargs):
         unique_slugify(self, self.title)

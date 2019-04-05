@@ -34,6 +34,7 @@ if DEBUG:
         '.ngrok.io',
     ]
 
+ROOT_URL = os.environ.get('ROOT_URL', '')
 
 # Application definition
 
