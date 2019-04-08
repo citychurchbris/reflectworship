@@ -57,18 +57,12 @@ class Command(BaseCommand):
 
         for fieldname, xmlfieldname in ccli_mapping.items():
             value = tree.attrib.get(xmlfieldname)
-            if value:
+            current_value = getattr(song, fieldname, None)
+            if value != current_value:
                 setattr(song, fieldname, value)
                 changed = True
 
-        # Grab video from songselect
-        if song.songselect_url and not song.youtube_url:
-            video_url = grab_songselect_video(song.songselect_url)
-            if video_url:
-                song.youtube_url = video_url
-                changed = True
-                # Pause before contacting songselect again
-                sleep(3)
-
         if changed:
             song.save()
+            # Pause before contacting songselect again
+            sleep(3)

@@ -114,13 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-gb'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -128,3 +124,46 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Songselect
+SONGSELECT_USERNAME = os.getenv('SONGSELECT_USERNAME')
+SONGSELECT_PASSWORD = os.getenv('SONGSELECT_PASSWORD')
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(asctime)s: %(levelname)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', ],
+            # Set django default to 'warning' to avoid polluting
+            # logs with every single http request
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'WARNING'),
+        },
+        # Prevents invalid host errors from clogging up sentry
+        # https://docs.djangoproject.com/en/2.0/topics/logging/#django-security
+        'django.security.DisallowedHost': {
+            'handlers': ['console', ],
+            'propagate': False,
+        },
+        'reflectworship': {
+            'handlers': ['console', ],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+        'reflectsongs': {
+            'handlers': ['console', ],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+    },
+}

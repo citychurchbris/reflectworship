@@ -5,6 +5,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from reflectsongs.songselect import SongSelect
 from reflectsongs.utils import unique_slugify, url_to_link
 
 SONGSELECT_BASE_URL = 'https://songselect.ccli.com/Songs/'
@@ -98,8 +99,13 @@ class Song(ModelBase):
     def view_url(self):
         return settings.ROOT_URL + reverse('song-view', args=(self.slug, ))
 
+    def sync(self):
+        songselect = SongSelect()
+        song_data = songselect.parse(self.songselect_url)
+
     def save(self, **kwargs):
         unique_slugify(self, self.title)
+        self.sync()
         super().save(**kwargs)
 
 
