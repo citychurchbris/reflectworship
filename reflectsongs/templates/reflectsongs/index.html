@@ -34,7 +34,7 @@
     <h5 class="card-header">New Songs</h5>
     <div class="card-body">
       <p>
-        Newest songs by copyright date
+        Songs most recently introduced
       </p>
       <table class="table table-striped">
         <thead>
@@ -47,7 +47,7 @@
             <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
           </td>
           <td>
-            {{ song.copyright_year }}
+            {{ song.first_played }}
           </td>
         </tr>
         {% endfor %}
