@@ -5,7 +5,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from reflectsongs.utils import unique_slugify, url_to_link
+from reflectsongs.utils import unique_slugify, url_to_link, yt_image
 
 SONGSELECT_BASE_URL = 'https://songselect.ccli.com/Songs/'
 
@@ -93,6 +93,11 @@ class Song(ModelBase):
         else:
             return ''
     songselect_link.fget.short_description = _('SongSelect Link')
+
+    @property
+    def photo(self):
+        if self.youtube_url:
+            return yt_image(self.youtube_url)
 
     @property
     def view_url(self):

@@ -10,11 +10,24 @@ YOUTUBE_VIDEO_ROOT = 'https://www.youtube.com/watch?v='
 
 
 def url_to_link(url):
+    """
+    Convert URL to a html link tag
+    """
     return format_html("<a href='{url}'>{url}</a>", url=url)
 
 
+def yt_url_to_id(url):
+    """
+    Pull the youtube video id from a youtube url
+    """
+    return url.split('?v=')[-1]
+
+
 def yt_embed(url):
-    ytid = url.split('?v=')[-1]
+    """
+    Generated embed code for a youtube video
+    """
+    ytid = yt_url_to_id(url)
     return format_html(
         '<iframe width="560" height="315" '
         'src="https://www.youtube.com/embed/{ytid}" frameborder="0" '
@@ -22,6 +35,14 @@ def yt_embed(url):
         '</iframe>',
         ytid=ytid,
     )
+
+
+def yt_image(url):
+    """
+    Get preview image from youtube video
+    """
+    ytid = yt_url_to_id(url)
+    return f'https://img.youtube.com/vi/{ytid}/maxresdefault.jpg'
 
 
 def grab_songselect_video(songselect_url):
