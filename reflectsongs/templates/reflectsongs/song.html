@@ -9,17 +9,17 @@
 </h1>
 
 <dl class="row">
-  <dt class="col-sm-2">Authors</dt>
-  <dd class="col-sm-10">{{ song.authors }}</dd>
+  <dt class="col-sm-3">Authors</dt>
+  <dd class="col-sm-9">{{ song.authors }}</dd>
 
-  <dt class="col-sm-2">Copyright Year</dt>
-  <dd class="col-sm-10">{{ song.copyright_year }}</dd>
+  <dt class="col-sm-3">Copyright</dt>
+  <dd class="col-sm-9">{{ song.copyright_year }}</dd>
 
-  <dt class="col-sm-2">Plays</dt>
-  <dd class="col-sm-10">{{ song.setlists.count }}</dd>
+  <dt class="col-sm-3">Plays</dt>
+  <dd class="col-sm-9">{{ song.setlists.count }}</dd>
 
-  <dt class="col-sm-2">Last played</dt>
-  <dd class="col-sm-10">{{ song.last_played }}</dd>
+  <dt class="col-sm-3">Last played</dt>
+  <dd class="col-sm-9">{{ song.last_played }}</dd>
 </dl>
 {% if song.songselect_url %}
 <p>
