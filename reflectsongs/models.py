@@ -33,6 +33,9 @@ class Site(ModelBase):
         max_length=200,
     )
 
+    def recent_setlist(self):
+        return self.setlists.first()
+
 
 class Song(ModelBase):
     """

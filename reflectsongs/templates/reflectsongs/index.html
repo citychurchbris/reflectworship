@@ -36,6 +36,7 @@
       <p>
         Songs most recently introduced
       </p>
+      <img src="{{ newsongs.0.photo }}" class="img-fluid" />
       <table class="table table-striped">
         <thead>
           <th>Song</th>
@@ -54,6 +55,35 @@
       </table>
     </div>
   </div>
+</div>
+
+<div class="card-deck mt-3">
+  {% for site in sites %}
+  <div class="card">
+    <h5 class="card-header">{{ site.name }}</h5>
+    <div class="card-body">
+      <p>
+        <em>Setlist {{ site.recent_setlist }}</em>
+      </p>
+      <table class="table table-striped">
+        <thead>
+          <th>Song</th>
+          <th>Date</th>
+        </thead>
+        {% for song in site.recent_setlist.songs.all %}
+        <tr>
+          <td>
+            <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
+          </td>
+          <td>
+            {{ song.first_played }}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+  {% endfor %}
 
 </div>
 

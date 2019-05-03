@@ -6,7 +6,7 @@ from django.views import View
 
 from dateutil.relativedelta import relativedelta
 
-from reflectsongs.models import Song
+from reflectsongs.models import Site, Song
 from reflectsongs.utils import yt_embed
 
 
@@ -35,6 +35,7 @@ class HomeView(View):
             context={
                 'topsongs': topsongs,
                 'newsongs': newsongs,
+                'sites': Site.objects.all(),
             }
         )
 
