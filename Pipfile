@@ -10,6 +10,9 @@ python-dateutil = "*"
 django-easy-select2 = "*"
 requests = "*"
 beautifulsoup4 = "*"
+dj-database-url = "*"
+whitenoise = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 
