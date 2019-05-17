@@ -1,5 +1,6 @@
 import datetime
 
+from django.core.paginator import Paginator
 from django.db.models import Count, Max, Min
 from django.shortcuts import get_object_or_404, render
 from django.views import View
@@ -57,3 +58,14 @@ class SongView(View):
             'reflectsongs/song.html',
             context=context,
         )
+
+
+class SongList(View):
+
+    def get(self, request):
+        song_list = Song.objects.all().order_by('title')
+        paginator = Paginator(song_list, 10)
+
+        page = request.GET.get('page')
+        songs = paginator.get_page(page)
+        return render(request, 'reflectsongs/song_list.html', {'songs': songs})
