@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 
+import dj_database_url
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,6 +27,18 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DJANGO_DEBUG')
 
+# SSL setup
+# https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
+# SSL is *on* by default - must be manually switched off in
+# development using DISABLE_SSL
+SECURE_SSL_REDIRECT = os.environ.get('DISABLE_SSL', 'false').lower() != 'true'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+if SECURE_SSL_REDIRECT:  # pragma: no cover
+    SECURE_HSTS_SECONDS = 3600
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+
 ALLOWED_HOSTS = [
 ]
 
@@ -33,8 +47,18 @@ if DEBUG:
         '127.0.0.1',
         '.ngrok.io',
     ]
+else:
+    ALLOWED_HOSTS = [
+        '.herokuapp.com',
+        '.citychurch.org.uk',
+    ]
 
-ROOT_URL = os.environ.get('ROOT_URL', '')
+
+# ROOT_URL used for generating absolute URLs (e.g. in emails)
+ROOT_URL = os.environ.get('ROOT_URL')
+if not ROOT_URL:
+    raise RuntimeError(
+        'ROOT_URL not found in environment')  # pragma: no cover
 
 # Application definition
 
@@ -83,13 +107,15 @@ WSGI_APPLICATION = 'reflectworship.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+if not os.environ.get('DATABASE_URL'):
+    raise RuntimeError(
+        'DATABASE_URL not found in environment')  # pragma: no cover
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.parse(
+        os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+    )
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -114,17 +140,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-gb'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-
+# https://docs.djangoproject.com/en/1.10/howto/static-files/
+# Using whitenoise here for static files as it is simpler
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
