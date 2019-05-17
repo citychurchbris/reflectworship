@@ -27,7 +27,9 @@ class HomeView(View):
         ).order_by('-setlist_count')[:10]
 
         # No date filter on newest
-        newsongs = queryset.order_by('-_first_played')[:10]
+        newsongs = queryset.filter(
+            _first_played__isnull=False
+        ).order_by('-_first_played')[:10]
 
         return render(
             request,
