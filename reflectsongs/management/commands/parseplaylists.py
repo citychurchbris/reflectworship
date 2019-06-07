@@ -1,19 +1,15 @@
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
 
+import dropbox
 from dateutil import parser as date_parser
 from dateutil import relativedelta
 from lxml import etree
 
 from reflectsongs.models import Setlist, Site, Song
 
-EXCLUDE = (
-    'Default Sunday',
-    'Welcome Card',
-    '#Countdown Timer (Use every week)',
-    'Pre-Service Notices Loop',
-    'Post-Service Notices Loop ',
-)
+EXCLUDE = ()
 EXCLUDE_LOWER = [x.lower() for x in EXCLUDE]
 
 
@@ -21,19 +17,35 @@ class Command(BaseCommand):
     help = 'Imports playlists from ProPresenter'
 
     def add_arguments(self, parser):
-        parser.add_argument('playlist_filename')
         parser.add_argument('site_name')
+        parser.add_argument('--playlist_filename')
+
+    def _playlist_from_dropbox(self, site_name):
+        dbx = dropbox.Dropbox(settings.DROPBOX_ACCESS_TOKEN)
+        playlist_location = (
+            f'{settings.DROPBOX_PATH}/{site_name}/'
+            '__Playlist_Data/Default.pro6pl'
+        )
+        meta, response = dbx.files_download(playlist_location)
+        return response.content
+
+    def _playlist_from_file(self, filename):
+        with open(filename) as plfile:
+            pldata = plfile.read()
+        return pldata.encode('utf-8')
 
     def handle(self, *args, **options):
         site = Site.objects.get(name__iexact=options['site_name'])
 
-        with open(options['playlist_filename']) as plfile:
-            pldata = plfile.read()
+        playlist_filename = options['playlist_filename']
+        if playlist_filename:
+            pldata = self._playlist_from_file(playlist_filename)
+        else:
+            pldata = self._playlist_from_dropbox(site.name)
 
-        xml = pldata.encode('utf-8')
         xmlparser = etree.XMLParser(
             ns_clean=True, recover=True, encoding='utf-8')
-        tree = etree.fromstring(xml, parser=xmlparser)
+        tree = etree.fromstring(pldata, parser=xmlparser)
 
         playlists = self.get_playlists(tree)
         self.process_playlists(playlists, site)

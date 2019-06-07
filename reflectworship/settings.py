@@ -104,6 +104,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'reflectworship.wsgi.application'
 
+# Dropbox integration
+DROPBOX_ACCESS_TOKEN = os.getenv('DROPBOX_ACCESS_TOKEN')
+DROPBOX_PATH = os.getenv('DROPBOX_PATH')
+
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
