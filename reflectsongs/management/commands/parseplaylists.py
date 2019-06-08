@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from reflectsongs.integrations import ProPresenterImporter
+from reflectsongs.integrations import ProPresenterPlaylistImporter
 from reflectsongs.models import Site
 
 EXCLUDE = ()
@@ -18,7 +18,7 @@ class Command(BaseCommand):
         site = Site.objects.get(name__iexact=options['site_name'])
 
         playlist_filename = options['playlist_filename']
-        importer = ProPresenterImporter()
+        importer = ProPresenterPlaylistImporter()
 
         if playlist_filename:
             importer.get_playlists_from_file(site, playlist_filename)
