@@ -5,6 +5,7 @@ from time import sleep
 
 from django.conf import settings
 from django.db.utils import IntegrityError
+from django.utils import timezone
 
 import dropbox
 from dateutil import parser as date_parser
@@ -174,6 +175,7 @@ class ProPresenterSongImporter(object):
         )
         print('Processing: {}'.format(song))
         changed = False
+        pause = False
 
         # Look up CCLI info
         ccli_mapping = {
@@ -184,21 +186,29 @@ class ProPresenterSongImporter(object):
 
         for fieldname, xmlfieldname in ccli_mapping.items():
             value = tree.attrib.get(xmlfieldname)
-            if value:
+            current_value = getattr(song, fieldname)
+            if value and value != current_value:
                 setattr(song, fieldname, value)
                 changed = True
 
         # Grab video from songselect
-        if update:
+        if update and not song.last_sync:
             if song.songselect_url and not song.youtube_url:
                 video_url = grab_songselect_video(song.songselect_url)
                 if video_url:
                     print(f'Got video for {song}')
                     song.youtube_url = video_url
-                    changed = True
-                # Pause before contacting songselect again
-                print('Pausing...')
-                sleep(3)
+                song.last_sync = timezone.now()
+                changed = True
+                pause = True
+            elif not song.last_sync:
+                song.last_sync = timezone.now()
+                changed = True
 
         if changed:
             song.save()
+
+        if pause:
+            # Pause before contacting external sites again
+            print('Pausing...')
+            sleep(3)

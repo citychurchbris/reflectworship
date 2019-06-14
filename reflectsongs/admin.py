@@ -65,6 +65,7 @@ class SongAdmin(admin.ModelAdmin):
         'play_count',
         'last_played',
         'setlist_display',
+        'last_sync',
     )
 
     def get_queryset(self, request):

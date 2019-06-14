@@ -72,6 +72,12 @@ class Song(ModelBase):
         null=True,
     )
 
+    last_sync = models.DateTimeField(
+        _('Last Sync'),
+        null=True,
+        blank=True,
+    )
+
     @property
     def last_played(self):
         if self.setlists.count():
