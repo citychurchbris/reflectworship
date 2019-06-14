@@ -11,6 +11,10 @@ from reflectsongs.models import Site, Song
 from reflectsongs.utils import yt_embed
 
 
+def has_photo(item):
+    return bool(item.photo)
+
+
 class HomeView(View):
 
     def get(self, request):
@@ -37,7 +41,9 @@ class HomeView(View):
             'reflectsongs/index.html',
             context={
                 'topsongs': topsongs,
+                'topsongs_photos': list(filter(has_photo, topsongs)),
                 'newsongs': newsongs,
+                'newsongs_photos': list(filter(has_photo, newsongs)),
                 'sites': Site.objects.all(),
             }
         )

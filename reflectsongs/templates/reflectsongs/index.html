@@ -10,8 +10,8 @@
       <p>
         Most frequently played songs in the last 6 months
       </p>
-      {% if topsongs.0.photo %}
-      <img src="{{ topsongs.0.photo }}" class="img-fluid" />
+      {% if topsongs_photos %}
+      <img src="{{ topsongs_photos.0.photo }}" class="img-fluid" />
       {% endif %}
       <table class="table table-striped">
         <thead>
@@ -38,8 +38,8 @@
       <p>
         Songs most recently introduced
       </p>
-      {% if newsongs.0.photo %}
-      <img src="{{ newsongs.0.photo }}" class="img-fluid" />
+      {% if newsongs_photos %}
+      <img src="{{ newsongs_photos.0.photo }}" class="img-fluid" />
       {% endif %}
       <table class="table table-striped">
         <thead>
