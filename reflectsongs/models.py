@@ -108,9 +108,8 @@ class Song(ModelBase):
         if self.youtube_url:
             return yt_image(self.youtube_url)
 
-    @property
-    def view_url(self):
-        return settings.ROOT_URL + reverse('song-view', args=(self.slug, ))
+    def get_absolute_url(self):
+        return reverse('song-view', args=(self.slug, ))
 
     def save(self, **kwargs):
         unique_slugify(self, self.title)

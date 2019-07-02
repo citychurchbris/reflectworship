@@ -61,7 +61,6 @@ class SongAdmin(admin.ModelAdmin):
     readonly_fields = (
         'slug',
         'songselect_link',
-        'view_url',
         'play_count',
         'last_played',
         'setlist_display',
@@ -92,9 +91,6 @@ class SongAdmin(admin.ModelAdmin):
             _last_played=Max("setlists__date", filter=sitefil),
         )
         return queryset
-
-    def view_url(self, obj):
-        return url_to_link(obj.view_url)
 
     def play_count(self, obj):
         return obj._setlist_count
