@@ -8,7 +8,7 @@
   {% for song in songs %}
   <li class="list-group-item">
       <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
-      {% if song.authors %}({{ song.authors }}){% endif %}
+      {% if song.authors %}<small>- {{ song.authors }}</small>{% endif %}
   </li>
   {% endfor %}
 </ul>

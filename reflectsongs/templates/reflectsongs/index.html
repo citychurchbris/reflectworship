@@ -22,6 +22,10 @@
         <tr>
           <td>
             <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
+            {% if song.authors %}
+            <br />
+            <small>{{ song.authors }}</small>
+            {% endif %}
           </td>
           <td>
             {{ song.setlist_count }}
@@ -50,6 +54,10 @@
         <tr>
           <td>
             <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
+            {% if song.authors %}
+            <br />
+            <small>{{ song.authors }}</small>
+            {% endif %}
           </td>
           <td>
             {{ song.first_played }}
@@ -70,17 +78,14 @@
         <em>Setlist {{ site.recent_setlist }}</em>
       </p>
       <table class="table table-striped">
-        <thead>
-          <th>Song</th>
-          <th>Date</th>
-        </thead>
         {% for song in site.recent_setlist.songs.all %}
         <tr>
           <td>
             <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
-          </td>
-          <td>
-            {{ song.first_played }}
+            {% if song.authors %}
+            <br />
+            <small>{{ song.authors }}</small>
+            {% endif %}
           </td>
         </tr>
         {% endfor %}
