@@ -9,7 +9,6 @@ from easy_select2 import Select2Multiple
 
 from reflectsongs.filters import SiteSongFilter
 from reflectsongs.models import Setlist, Site, Song
-from reflectsongs.utils import url_to_link
 
 
 @admin.register(Site)
@@ -49,6 +48,8 @@ class SongAdmin(admin.ModelAdmin):
     )
     list_display = (
         'title',
+        'authors',
+        'ccli_number',
         'copyright_year',
         'play_count',
         'last_played',
@@ -95,6 +96,7 @@ class SongAdmin(admin.ModelAdmin):
     def play_count(self, obj):
         return obj._setlist_count
     play_count.admin_order_field = '_setlist_count'
+    play_count.short_description = 'Plays'
 
     def last_played(self, obj):
         return obj._last_played
