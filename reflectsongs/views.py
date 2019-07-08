@@ -4,10 +4,11 @@ from django.core.paginator import Paginator
 from django.db.models import Count, Max, Min
 from django.shortcuts import get_object_or_404, render
 from django.views import View
+from django.views.generic import ListView
 
 from dateutil.relativedelta import relativedelta
 
-from reflectsongs.models import Site, Song
+from reflectsongs.models import Setlist, Site, Song
 from reflectsongs.utils import yt_embed
 
 
@@ -75,3 +76,10 @@ class SongList(View):
         page = request.GET.get('page')
         songs = paginator.get_page(page)
         return render(request, 'reflectsongs/song_list.html', {'songs': songs})
+
+
+class SetlistList(ListView):
+
+    model = Setlist
+    context_object_name = 'setlists'
+    paginate_by = 10
