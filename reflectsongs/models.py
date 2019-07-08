@@ -65,6 +65,8 @@ class Song(ModelBase):
     ccli_number = models.CharField(
         _('CCLI Number'),
         max_length=200,
+        blank=True,
+        null=True,
     )
 
     youtube_url = models.URLField(
