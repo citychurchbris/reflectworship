@@ -5,7 +5,7 @@
 <div class="col-sm-12 col-md-6">
 
 <h1>
-{{ song.title }}
+  {{ song.title }}
 </h1>
 
 <dl class="row">
@@ -28,7 +28,14 @@
      role="button">SongSelect</a>
 </p>
 {% endif %}
+{% if request.user.is_staff %}
+<p>
+  <a class="btn btn-outline-primary" href="{% url 'admin:reflectsongs_song_change' song.id %}">Edit</a>
+</p>
+{% endif %}
+
 </div>
+
 <div class="col-sm-12 col-md-6">
 
 {% if song.youtube_url %}
