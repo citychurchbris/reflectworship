@@ -27,17 +27,25 @@ class SetlistForm(forms.ModelForm):
 @admin.register(Setlist)
 class SetlistAdmin(admin.ModelAdmin):
     form = SetlistForm
+    search_fields = (
+        'name',
+    )
     date_hierarchy = 'date'
     list_display = (
         '__str__',
         'site',
         'date',
         'name',
+        'nsongs',
     )
     list_filter = (
         'site',
         'date',
     )
+
+    def nsongs(self, obj):
+        return obj.songs.count()
+    nsongs.short_description = 'Songs'
 
 
 @admin.register(Song)
