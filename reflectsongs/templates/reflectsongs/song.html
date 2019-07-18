@@ -21,18 +21,21 @@
   <dt class="col-sm-3">Last played</dt>
   <dd class="col-sm-9">{{ song.last_played }}</dd>
 </dl>
-{% if song.songselect_url %}
 <p>
+  {% if song.songselect_url %}
   <a class="btn btn-primary"
      href="{{ song.songselect_url }}"
      role="button">SongSelect</a>
-</p>
-{% endif %}
-{% if request.user.is_staff %}
-<p>
+  {% endif %}
+  {% if song.worshiptogether_url %}
+  <a class="btn btn-success"
+     href="{{ song.worshiptogether_url }}"
+     role="button">Worship Together</a>
+  {% endif %}
+  {% if request.user.is_staff %}
   <a class="btn btn-outline-primary" href="{% url 'admin:reflectsongs_song_change' song.id %}">Edit</a>
+  {% endif %}
 </p>
-{% endif %}
 
 </div>
 
@@ -48,6 +51,16 @@
   </div>
 </div>
 {% endif %}
+
 </div>
+
+</div>
+
+{% if song.lyrics %}
+<h4>Lyrics</h4>
+<p>
+  {{ song.lyrics | linebreaks }}
+</p>
+{% endif %}
 
 {% endblock %}

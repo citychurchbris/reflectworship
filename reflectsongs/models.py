@@ -74,6 +74,16 @@ class Song(ModelBase):
         null=True,
     )
 
+    worshiptogether_url = models.URLField(
+        blank=True,
+        null=True,
+    )
+
+    lyrics = models.TextField(
+        blank=True,
+        null=True,
+    )
+
     last_sync = models.DateTimeField(
         _('Last Sync'),
         null=True,
