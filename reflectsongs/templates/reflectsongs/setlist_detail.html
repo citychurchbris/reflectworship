@@ -1,9 +1,7 @@
 {% extends 'reflectsongs/base.html' %}
 
 {% block content %}
-<h1>
-  {{ setlist.friendly_name }}
-</h1>
+<h1>{% block title %}{{ setlist.friendly_name }}{% endblock %}</h1>
 
   <div class="card">
     <div class="card-body">
