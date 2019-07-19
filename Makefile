@@ -36,7 +36,7 @@ coverage-server:
 heroku-setup:
 	git remote add heroku https://git.heroku.com/reflectworship.git
 
-# Deploy and run migrations on heroku (staging)
+# Deploy and run migrations on heroku
 deploy:
 	heroku maintenance:on
 	@git push heroku master
