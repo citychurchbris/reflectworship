@@ -11,7 +11,9 @@
         Most frequently played songs in the last 6 months
       </p>
       {% if topsongs_photos %}
-      <img src="{{ topsongs_photos.0.photo }}" class="img-fluid" />
+      <a href="{% url 'song-view' topsongs_photos.0.slug %}">
+        <img src="{{ topsongs_photos.0.photo }}" class="img-fluid" />
+      </a>
       {% endif %}
       <table class="table table-striped">
         <thead>
@@ -43,7 +45,9 @@
         Songs most recently introduced
       </p>
       {% if newsongs_photos %}
-      <img src="{{ newsongs_photos.0.photo }}" class="img-fluid" />
+      <a href="{% url 'song-view' newsongs_photos.0.slug %}">
+        <img src="{{ newsongs_photos.0.photo }}" class="img-fluid" />
+      </a>
       {% endif %}
       <table class="table table-striped">
         <thead>

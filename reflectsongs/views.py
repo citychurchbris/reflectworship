@@ -33,8 +33,11 @@ class HomeView(View):
         ).order_by('-setlist_count')[:10]
 
         # No date filter on newest
+        last_year = today.year - 3
         newsongs = queryset.filter(
             _first_played__isnull=False
+        ).filter(
+            copyright_year__gt=last_year
         ).order_by('-_first_played')[:10]
 
         return render(
