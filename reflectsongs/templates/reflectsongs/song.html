@@ -19,7 +19,19 @@
   <dd class="col-sm-9">{{ song.setlists.count }}</dd>
 
   <dt class="col-sm-3">Last played</dt>
-  <dd class="col-sm-9">{{ song.last_played }}</dd>
+  <dd class="col-sm-9">
+    {% for lp in last_played_sites %}
+    {{ lp.site }}:
+    {% if lp.last_played %}
+    <a href="{% url 'setlist-view' lp.last_played.id %}">
+      {{ lp.last_played.date }}
+    </a>
+    {% else %}
+    &mdash;
+    {% endif %}
+    <br />
+    {% endfor %}
+  </dd>
 </dl>
 <p>
   {% if song.songselect_url %}

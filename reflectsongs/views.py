@@ -56,9 +56,25 @@ class HomeView(View):
 class SongView(View):
 
     def get(self, request, song_slug):
+        sites = Site.objects.all()
         song = get_object_or_404(Song, slug=song_slug)
+
+        # Calculate last played date for each site
+        last_played_sites = []
+        for site in sites:
+            last_played_sites.append({
+                'site': site,
+                'last_played': song.last_played_site(site),
+            })
+        last_played_sites.sort(
+            key=lambda x: x['last_played'] and x['last_played'].date
+            or datetime.date.min,
+            reverse=True,
+        )
+
         context = {
             'song': song,
+            'last_played_sites': last_played_sites,
         }
         if song.youtube_url:
             context['embed_code'] = yt_embed(song.youtube_url)

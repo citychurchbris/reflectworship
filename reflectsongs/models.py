@@ -93,12 +93,17 @@ class Song(ModelBase):
     @property
     def last_played(self):
         if self.setlists.count():
-            return self.setlists.order_by('-date').first().date
+            return self.setlists.order_by('-date').first()
+
+    def last_played_site(self, site):
+        setlists = self.setlists.filter(site=site)
+        if setlists.count():
+            return setlists.order_by('-date').first()
 
     @property
     def first_played(self):
         if self.setlists.count():
-            return self.setlists.order_by('-date').last().date
+            return self.setlists.order_by('-date').last()
 
     @property
     def songselect_url(self):

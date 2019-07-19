@@ -52,7 +52,7 @@
       <table class="table table-striped">
         <thead>
           <th>Song</th>
-          <th>Date</th>
+          <th width="30%">First Played</th>
         </thead>
         {% for song in newsongs %}
         <tr>
@@ -64,7 +64,7 @@
             {% endif %}
           </td>
           <td>
-            {{ song.first_played }}
+            {{ song.first_played.date }}
           </td>
         </tr>
         {% endfor %}
