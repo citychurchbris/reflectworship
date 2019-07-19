@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.db.models import Count, Max, Min
 from django.shortcuts import get_object_or_404, render
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import DetailView, ListView
 
 from dateutil.relativedelta import relativedelta
 
@@ -83,3 +83,8 @@ class SetlistList(ListView):
     model = Setlist
     context_object_name = 'setlists'
     paginate_by = 10
+
+
+class SetlistView(DetailView):
+
+    model = Setlist

@@ -7,7 +7,7 @@
 <ul class="list-group mt-3">
   {% for setlist in setlists %}
   <li class="list-group-item">
-    <a href="#">{{ setlist }}</a>
+    <a href="{% url 'setlist-view' setlist.id %}">{{ setlist.friendly_name }}</a>
       <small>- {{ setlist.songs.count }} songs</small>
   </li>
   {% endfor %}

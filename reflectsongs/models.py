@@ -1,8 +1,8 @@
 import uuid
 
-from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from django.utils import formats
 from django.utils.translation import gettext as _
 
 from reflectsongs.utils import unique_slugify, url_to_link, yt_image
@@ -127,7 +127,6 @@ class Song(ModelBase):
         unique_slugify(self, self.title)
         super().save(**kwargs)
 
-
 class Setlist(ModelBase):
     """
     A set of songs
@@ -146,6 +145,16 @@ class Setlist(ModelBase):
         if self.name:
             value += ' ({})'.format(self.name)
         return value
+
+    @property
+    def friendly_name(self):
+        date = formats.date_format(self.date, 'DATE_FORMAT')
+        return f"{date}: {self.site} ({self.short_name})"
+
+    @property
+    def short_name(self):
+        short = self.name.replace(self.site.name, '')
+        return short.strip()
 
     date = models.DateField()
     name = models.CharField(

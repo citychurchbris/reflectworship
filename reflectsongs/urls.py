@@ -3,7 +3,8 @@
 """
 from django.urls import path
 
-from reflectsongs.views import HomeView, SetlistList, SongList, SongView
+from reflectsongs.views import (HomeView, SetlistList, SetlistView, SongList,
+                                SongView)
 
 urlpatterns = [
     path('', HomeView.as_view()),
@@ -13,5 +14,6 @@ urlpatterns = [
     path('songs/', SongList.as_view(), name='song-list'),
 
     # Setlists
+    path('setlists/<pk>/', SetlistView.as_view(), name='setlist-view'),
     path('setlists/', SetlistList.as_view(), name='setlist-list')
 ]
