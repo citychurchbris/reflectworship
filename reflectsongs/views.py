@@ -1,7 +1,7 @@
 import datetime
 
 from django.core.paginator import Paginator
-from django.db.models import Count, Max, Min
+from django.db.models import Count, Max, Min, Q
 from django.shortcuts import get_object_or_404, render
 from django.views import View
 from django.views.generic import DetailView, ListView
@@ -12,42 +12,76 @@ from reflectsongs.models import Setlist, Site, Song
 from reflectsongs.utils import yt_embed
 
 
+def get_song_queryset(site=None, from_date=None):
+    """ Get a reusable song queryset """
+    queryset = Song.objects.all()
+    if site is not None:
+        sitefil = Q(setlists__site=site)
+    else:
+        sitefil = Q()
+
+    if from_date:
+        datefil = Q(setlists__date__gte=from_date)
+    else:
+        datefil = Q()
+
+    queryset = queryset.annotate(
+        setlist_count=Count('setlists', distinct=True,
+                            filter=sitefil & datefil),
+        _first_played=Min("setlists__date", filter=sitefil),
+        _last_played=Max("setlists__date", filter=sitefil),
+    )
+    return queryset
+
+
+def get_top_songs(site=None, months=6):
+    """ Last x months of most played songs """
+    today = datetime.date.today()
+    songs = get_song_queryset(
+        site=site,
+        from_date=today - relativedelta(months=6)
+    )
+    return songs.order_by('-setlist_count')[:10]
+
+
+def get_newest_songs(site=None, written_since=None):
+    """ Newest songs that were written since x """
+    if written_since is None:
+        today = datetime.date.today()
+        written_since = today.year - 3
+
+    songs = get_song_queryset(site=site)
+    newsongs = songs.filter(
+        _first_played__isnull=False
+    ).filter(
+        copyright_year__gt=written_since
+    ).order_by('-_first_played')[:10]
+    return newsongs
+
+
 def has_photo(item):
     return bool(item.photo)
+
+
+def photo_filter(items):
+    return list(filter(has_photo, items))
 
 
 class HomeView(View):
 
     def get(self, request):
-        queryset = Song.objects.all()
-        queryset = queryset.annotate(
-            setlist_count=Count('setlists', distinct=True),
-            _first_played=Min("setlists__date"),
-            _last_played=Max("setlists__date"),
-        )
-
         # Last 6 months of top songs
-        today = datetime.date.today()
-        topsongs = queryset.filter(
-            _last_played__gt=today - relativedelta(months=6),
-        ).order_by('-setlist_count')[:10]
-
-        # No date filter on newest
-        last_year = today.year - 3
-        newsongs = queryset.filter(
-            _first_played__isnull=False
-        ).filter(
-            copyright_year__gt=last_year
-        ).order_by('-_first_played')[:10]
+        topsongs = get_top_songs()
+        newsongs = get_newest_songs()
 
         return render(
             request,
             'reflectsongs/index.html',
             context={
                 'topsongs': topsongs,
-                'topsongs_photos': list(filter(has_photo, topsongs)),
+                'topsongs_photos': photo_filter(topsongs),
                 'newsongs': newsongs,
-                'newsongs_photos': list(filter(has_photo, newsongs)),
+                'newsongs_photos': photo_filter(newsongs),
                 'sites': Site.objects.all(),
             }
         )
