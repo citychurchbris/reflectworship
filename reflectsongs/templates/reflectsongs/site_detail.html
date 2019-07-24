@@ -1,0 +1,76 @@
+{% extends 'reflectsongs/base.html' %}
+
+{% block content %}
+<h1>{% block title %}{{ site.name }}{% endblock %}</h1>
+
+<div class="card-deck">
+  <div class="card">
+    <h5 class="card-header">Top Songs</h5>
+    <div class="card-body">
+      <p>
+        Most frequently played songs in the last 6 months
+      </p>
+      {% if topsongs_photos %}
+      <a href="{% url 'song-view' topsongs_photos.0.slug %}">
+        <img src="{{ topsongs_photos.0.photo }}" class="img-fluid" />
+      </a>
+      {% endif %}
+      <table class="table table-striped">
+        <thead>
+          <th>Song</th>
+          <th>Plays</th>
+        </thead>
+        {% for song in topsongs %}
+        <tr>
+          <td>
+            <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
+            {% if song.authors %}
+            <br />
+            <small>{{ song.authors }}</small>
+            {% endif %}
+          </td>
+          <td>
+            {{ song.setlist_count }}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h5 class="card-header">New Songs</h5>
+    <div class="card-body">
+      <p>
+        Songs most recently introduced
+      </p>
+      {% if newsongs_photos %}
+      <a href="{% url 'song-view' newsongs_photos.0.slug %}">
+        <img src="{{ newsongs_photos.0.photo }}" class="img-fluid" />
+      </a>
+      {% endif %}
+      <table class="table table-striped">
+        <thead>
+          <th>Song</th>
+          <th width="30%">First Played</th>
+        </thead>
+        {% for song in newsongs %}
+        <tr>
+          <td>
+            <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
+            {% if song.authors %}
+            <br />
+            <small>{{ song.authors }}</small>
+            {% endif %}
+          </td>
+          <td>
+            {{ song.first_played.date }}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  </div>
+{% endblock %}

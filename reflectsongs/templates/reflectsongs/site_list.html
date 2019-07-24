@@ -1,0 +1,15 @@
+{% extends 'reflectsongs/base.html' %}
+
+{% block content %}
+
+<h1>{% block title %}Sites{% endblock %}</h1>
+
+<ul class="list-group mt-3">
+  {% for site in sites %}
+  <li class="list-group-item">
+    <a href="{% url 'site-view' site.slug %}">{{ site.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

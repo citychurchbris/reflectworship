@@ -141,3 +141,25 @@ class SetlistList(ListView):
 class SetlistView(DetailView):
 
     model = Setlist
+
+
+class SiteList(ListView):
+
+    model = Site
+    context_object_name = 'sites'
+
+
+class SiteView(DetailView):
+
+    model = Site
+
+    def get_context_data(self, **kwargs):
+        site = kwargs.get('object')
+        context = super().get_context_data(**kwargs)
+        topsongs = get_top_songs(site=site)
+        newsongs = get_newest_songs(site=site)
+        context['topsongs'] = topsongs
+        context['topsongs_photos'] = photo_filter(topsongs)
+        context['newsongs'] = newsongs
+        context['newsongs_photos'] = photo_filter(newsongs)
+        return context
