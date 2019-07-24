@@ -9,6 +9,9 @@
         {% for song in setlist.songs.all  %}
         <tr>
           <td>
+            {% if song.photo %}
+            <img src="{{ song.photo }}" class="rounded float-right d-none d-md-block thumb" />
+            {% endif %}
             <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
             {% if song.authors %}
             <br />
