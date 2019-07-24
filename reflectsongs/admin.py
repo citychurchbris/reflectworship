@@ -13,7 +13,8 @@ from reflectsongs.models import Setlist, Site, Song
 
 @admin.register(Site)
 class SiteAdmin(admin.ModelAdmin):
-    pass
+
+    prepopulated_fields = {"slug": ("name",)}
 
 
 class SetlistForm(forms.ModelForm):

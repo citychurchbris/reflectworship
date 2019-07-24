@@ -31,6 +31,11 @@ class Site(ModelBase):
 
     name = models.CharField(
         max_length=200,
+        unique=True,
+    )
+
+    slug = models.SlugField(
+        null=True
     )
 
     def recent_setlist(self):
@@ -131,6 +136,7 @@ class Song(ModelBase):
     def save(self, **kwargs):
         unique_slugify(self, self.title)
         super().save(**kwargs)
+
 
 class Setlist(ModelBase):
     """
