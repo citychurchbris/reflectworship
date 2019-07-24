@@ -12,7 +12,7 @@
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-      <link rel="stylesheet" href="{% static 'reflect/styles.css' %}">
+      <link rel="stylesheet" href="{% static 'reflect/styles.css' %}?v=20190724">
 
       <title>{% block title %}{% endblock %} | Reflect</title>
   </head>
@@ -38,8 +38,8 @@
                href="{% url 'song-list' %}">Songs</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link"
-               href="#">Sites</a>
+            <a class="nav-link {% navactive request 'site-list' %}"
+               href="{% url 'site-list' %}">Sites</a>
           </li>
         </ul>
       </div>

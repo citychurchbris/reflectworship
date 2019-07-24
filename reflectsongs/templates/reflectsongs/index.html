@@ -77,10 +77,16 @@
 <div class="card-deck mt-3">
   {% for site in sites %}
   <div class="card">
-    <h5 class="card-header">{{ site.name }}</h5>
+    <h5 class="card-header">
+      <a href="{% url 'site-view' site.slug %}">
+        {{ site.name }}
+      </a>
+    </h5>
     <div class="card-body">
       <p>
-        <em>Setlist {{ site.recent_setlist }}</em>
+        <a href="{% url 'setlist-view' site.recent_setlist.id %}">
+          <em>Setlist {{ site.recent_setlist.friendly_name }}</em>
+        </a>
       </p>
       <table class="table table-striped">
         {% for song in site.recent_setlist.songs.all %}
