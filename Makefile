@@ -38,10 +38,7 @@ heroku-setup:
 
 # Deploy and run migrations on heroku
 deploy:
-	heroku maintenance:on
 	@git push heroku master
-	heroku run ./manage.py migrate
-	heroku maintenance:off
 
 # Remove venv
 clean:
