@@ -74,6 +74,14 @@ class Song(ModelBase):
         null=True,
     )
 
+    featured = models.BooleanField(
+        help_text=(
+            'Featured songs appear at the top of the homepage'
+            '*New song* listings'
+            ),
+        default=False,
+    )
+
     youtube_url = models.URLField(
         blank=True,
         null=True,

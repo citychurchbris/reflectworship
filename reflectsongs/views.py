@@ -41,7 +41,7 @@ def get_top_songs(site=None, months=6):
         site=site,
         from_date=today - relativedelta(months=6)
     )
-    return songs.order_by('-setlist_count')[:10]
+    return songs.order_by('-setlist_count')
 
 
 def get_newest_songs(site=None, written_since=None):
@@ -55,7 +55,7 @@ def get_newest_songs(site=None, written_since=None):
         _first_played__isnull=False
     ).filter(
         copyright_year__gt=written_since
-    ).order_by('-_first_played')[:10]
+    ).order_by('-_first_played')
     return newsongs
 
 
@@ -71,8 +71,13 @@ class HomeView(View):
 
     def get(self, request):
         # Last 6 months of top songs
-        topsongs = get_top_songs()
+        topsongs = get_top_songs()[:10]
         newsongs = get_newest_songs()
+        featured = Song.objects.filter(featured=True)
+
+        # Add featured to top of new songs
+        newsongs = list(featured) + list(newsongs.filter(featured=False))
+        newsongs = newsongs[:10]
 
         return render(
             request,
@@ -156,8 +161,8 @@ class SiteView(DetailView):
     def get_context_data(self, **kwargs):
         site = kwargs.get('object')
         context = super().get_context_data(**kwargs)
-        topsongs = get_top_songs(site=site)
-        newsongs = get_newest_songs(site=site)
+        topsongs = get_top_songs(site=site)[:10]
+        newsongs = get_newest_songs(site=site)[:10]
         context['topsongs'] = topsongs
         context['topsongs_photos'] = photo_filter(topsongs)
         context['newsongs'] = newsongs

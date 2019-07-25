@@ -65,6 +65,10 @@
             {% endif %}
           </td>
           <td>
+            {% if song.featured %}
+            <span class="badge badge-pill badge-success">Featured</span>
+            <br />
+            {% endif %}
             {{ song.first_played.date }}
           </td>
         </tr>
