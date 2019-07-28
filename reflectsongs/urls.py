@@ -2,11 +2,15 @@
 
 """
 from django.urls import path
+from django.views.generic import TemplateView
 
 from reflectsongs.views import (HomeView, SetlistList, SetlistView, SiteList,
                                 SiteView, SongList, SongView)
 
 urlpatterns = [
+    path('robots.txt', TemplateView.as_view(
+        template_name="reflectsongs/robots.txt")),
+
     path('', HomeView.as_view()),
 
     # Setlists
