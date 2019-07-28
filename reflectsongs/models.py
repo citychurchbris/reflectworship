@@ -146,6 +146,47 @@ class Song(ModelBase):
         super().save(**kwargs)
 
 
+class ChordResource(ModelBase):
+    """ Represents a chord download (sheet music) """
+
+    song = models.ForeignKey(
+        Song,
+        on_delete=models.CASCADE,
+        related_name='downloads',
+    )
+    resource_type = models.CharField(
+        max_length=200,
+        choices=(
+            ('pdf', 'PDF'),
+            ('chordpro', 'ChordPro'),
+        ),
+    )
+    song_key = models.CharField(
+        max_length=5,
+        null=True,
+        blank=True,
+        choices=(
+            ('aflat', 'Ab'),
+            ('a', 'A'),
+            ('bflat', 'Bb'),
+            ('b', 'B'),
+            ('c', 'C'),
+            ('csharp', 'C'),
+            ('dflat', 'Db'),
+            ('d', 'D'),
+            ('eflat', 'Eb'),
+            ('e', 'E'),
+            ('f', 'F'),
+            ('fsharp', 'F#'),
+            ('gflat', 'Gb'),
+            ('g', 'G'),
+        ),
+    )
+    attachment = models.FileField(
+        upload_to='chordresources',
+    )
+
+
 class Setlist(ModelBase):
     """
     A set of songs

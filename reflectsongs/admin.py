@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 from easy_select2 import Select2Multiple
 
 from reflectsongs.filters import SiteSongFilter
-from reflectsongs.models import Setlist, Site, Song
+from reflectsongs.models import ChordResource, Setlist, Site, Song
 
 
 @admin.register(Site)
@@ -49,8 +49,15 @@ class SetlistAdmin(admin.ModelAdmin):
     nsongs.short_description = 'Songs'
 
 
+class ChordResourceInline(admin.TabularInline):
+    model = ChordResource
+
+
 @admin.register(Song)
 class SongAdmin(admin.ModelAdmin):
+    inlines = (
+        ChordResourceInline,
+    )
     search_fields = (
         'title',
         'authors',
