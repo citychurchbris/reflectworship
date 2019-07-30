@@ -125,15 +125,29 @@ class SongView(View):
         )
 
 
-class SongList(View):
+class SongList(ListView):
 
-    def get(self, request):
-        song_list = Song.objects.all().order_by('title')
-        paginator = Paginator(song_list, 10)
+    model = Song
+    context_object_name = 'songs'
+    paginate_by = 10
 
-        page = request.GET.get('page')
-        songs = paginator.get_page(page)
-        return render(request, 'reflectsongs/song_list.html', {'songs': songs})
+
+class Search(SongList):
+
+    def get_search_query(self):
+        return self.request.GET.get('q', '')
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        search_query = self.get_search_query()
+        if search_query:
+            queryset = queryset.filter(title__search=search_query)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['search_query'] = self.get_search_query()
+        return context
 
 
 class SetlistList(ListView):

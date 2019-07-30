@@ -6,14 +6,14 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta property="og:site_name" content="Reflect" />
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="The City Church Worship Database" />
     <meta property="og:description" content="The City Church Worship Database" />
     <meta property="og:image" content="{% root_url %}{% static 'reflect/reflect-brand.png' %}" />
 
       <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
 
-      <!-- Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
       <link rel="stylesheet" href="{% static 'reflect/styles.css' %}?v=20190724">
@@ -32,7 +32,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <a class="nav-link {% navactive request 'setlist-list' %}"
                href="{% url 'setlist-list' %}">Setlists</a>
@@ -46,6 +46,15 @@
                href="{% url 'site-list' %}">Sites</a>
           </li>
         </ul>
+        <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}">
+          <input class="form-control mr-sm-2" type="search"
+                 name="q"
+                 value="{{ request.GET.q }}"
+                 placeholder="Song Search" aria-label="Search" />
+          <button class="btn btn-outline-secondary my-2 my-sm-0"
+                  type="submit">Go
+          </button>
+        </form>
       </div>
       </div>
     </nav>

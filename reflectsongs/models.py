@@ -46,6 +46,11 @@ class Song(ModelBase):
     """
     A worship song
     """
+    class Meta:
+        ordering = (
+            'title',
+        )
+
     def __str__(self):
         return self.title
 
