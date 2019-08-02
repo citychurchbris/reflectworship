@@ -48,9 +48,6 @@
          href="{{ song.worshiptogether_url }}"
          role="button">Worship Together</a>
       {% endif %}
-      {% if request.user.is_staff %}
-      <a class="btn btn-outline-primary" href="{% url 'admin:reflectsongs_song_change' song.id %}">Edit</a>
-      {% endif %}
     </p>
 
   </div>
@@ -107,5 +104,8 @@
 
 </div>
 
+{% if request.user.is_staff %}
+<a class="btn btn-outline-primary" href="{% url 'admin:reflectsongs_song_change' song.id %}">Edit</a>
+{% endif %}
 
 {% endblock %}
