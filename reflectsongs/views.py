@@ -1,14 +1,13 @@
 import datetime
 
-from django.core.paginator import Paginator
 from django.db.models import Count, Max, Min, Q
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.views.generic import DetailView, ListView
 
 from dateutil.relativedelta import relativedelta
 
-from reflectsongs.models import Setlist, Site, Song
+from reflectsongs.models import ChordResource, Setlist, Site, Song
 from reflectsongs.utils import yt_embed
 
 
@@ -114,6 +113,7 @@ class SongView(View):
         context = {
             'song': song,
             'last_played_sites': last_played_sites,
+            'downloads': song.downloads.all(),
         }
         if song.youtube_url:
             context['embed_code'] = yt_embed(song.youtube_url)
@@ -182,3 +182,13 @@ class SiteView(DetailView):
         context['newsongs'] = newsongs
         context['newsongs_photos'] = photo_filter(newsongs)
         return context
+
+
+class DownloadResource(View):
+
+    def get(self, request, pk):
+        resource = get_object_or_404(
+            ChordResource,
+            pk=pk,
+        )
+        return redirect(resource.attachment.url)

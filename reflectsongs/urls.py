@@ -4,8 +4,9 @@
 from django.urls import path
 from django.views.generic import TemplateView
 
-from reflectsongs.views import (HomeView, Search, SetlistList, SetlistView,
-                                SiteList, SiteView, SongList, SongView)
+from reflectsongs.views import (DownloadResource, HomeView, Search,
+                                SetlistList, SetlistView, SiteList, SiteView,
+                                SongList, SongView)
 
 urlpatterns = [
     path('robots.txt', TemplateView.as_view(
@@ -20,6 +21,9 @@ urlpatterns = [
     # Songs
     path('songs/<slug:song_slug>/', SongView.as_view(), name='song-view'),
     path('songs/', SongList.as_view(), name='song-list'),
+
+    # Downloads
+    path('download/<pk>/', DownloadResource.as_view(), name='download'),
 
     # Sites
     path('sites/<slug:slug>/', SiteView.as_view(), name='site-view'),
