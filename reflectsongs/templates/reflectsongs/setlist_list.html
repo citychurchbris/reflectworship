@@ -8,7 +8,9 @@
   {% for setlist in setlists %}
   <li class="list-group-item">
     <a href="{% url 'setlist-view' setlist.id %}">{{ setlist.friendly_name }}</a>
-      <small>- {{ setlist.songs.count }} songs</small>
+    <small>- <b>{{ setlist.songs.count }} songs</b></small>
+    <br />
+    <small>{{ setlist.songs.all|join:", " }}</small>
   </li>
   {% endfor %}
 </ul>
