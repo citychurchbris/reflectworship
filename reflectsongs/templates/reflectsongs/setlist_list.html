@@ -1,8 +1,17 @@
 {% extends 'reflectsongs/base.html' %}
+{% load reflect_extras %}
 
 {% block content %}
 
-<h1>{% block title %}All Setlists{% endblock %}</h1>
+<h1>{% block title %}{{ title }}{% endblock %}</h1>
+
+<p>
+  {%if filter_song %}
+  Including: <a href="{% url 'song-view' filter_song.slug %}">{{ filter_song }}</a>
+  <br />
+  {%endif%}
+  {{ page_obj.paginator.count }} results
+</p>
 
 <ul class="list-group mt-3">
   {% for setlist in setlists %}

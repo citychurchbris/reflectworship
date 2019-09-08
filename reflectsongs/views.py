@@ -156,6 +156,28 @@ class SetlistList(ListView):
     context_object_name = 'setlists'
     paginate_by = 10
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        filter_song = self.get_filter_song()
+        if filter_song:
+            queryset = queryset.filter(songs=filter_song)
+        return queryset
+
+    def get_filter_song(self):
+        songslug = self.request.GET.get('song', '')
+        if songslug:
+            try:
+                return Song.objects.get(slug=songslug)
+            except Song.DoesNotExist:
+                return None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        filter_song = self.get_filter_song()
+        context['filter_song'] = filter_song
+        context['title'] = filter_song and 'Setlists' or 'All Setlists'
+        return context
+
 
 class SetlistView(DetailView):
 

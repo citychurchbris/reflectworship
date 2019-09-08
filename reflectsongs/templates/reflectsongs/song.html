@@ -21,7 +21,9 @@
 
       <dt class="col-sm-3">Plays</dt>
       <dd class="col-sm-9">
-        All time: <b>{{ song.setlists.count }}</b>
+        All time: <b><a href="{% url 'setlist-list' %}?song={{song.slug}}">
+            {{ song.setlists.count }}
+        </a></b>
         <br />
         Last 6 months: <b>{{ song.recent_setlists.count }}</b>
       </dd>
