@@ -20,7 +20,11 @@
       <dd class="col-sm-9">{{ song.copyright_year }}</dd>
 
       <dt class="col-sm-3">Plays</dt>
-      <dd class="col-sm-9">{{ song.setlists.count }}</dd>
+      <dd class="col-sm-9">
+        All time: <b>{{ song.setlists.count }}</b>
+        <br />
+        Last 6 months: <b>{{ song.recent_setlists.count }}</b>
+      </dd>
 
       <dt class="col-sm-3">Last played</dt>
       <dd class="col-sm-9">

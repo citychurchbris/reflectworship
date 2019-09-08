@@ -2,8 +2,10 @@ import uuid
 
 from django.db import models
 from django.urls import reverse
-from django.utils import formats
+from django.utils import formats, timezone
 from django.utils.translation import gettext as _
+
+from dateutil.relativedelta import relativedelta
 
 from reflectsongs.utils import unique_slugify, url_to_link, yt_image
 
@@ -117,6 +119,13 @@ class Song(ModelBase):
         setlists = self.setlists.filter(site=site)
         if setlists.count():
             return setlists.order_by('-date').first()
+
+    def recent_setlists(self, months=6, site=None):
+        now = timezone.now()
+        recent = self.setlists.filter(date__gt=now-relativedelta(months=months))
+        if site:
+            recent = recent.filter(site=site)
+        return recent
 
     @property
     def first_played(self):
