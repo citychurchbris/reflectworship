@@ -72,5 +72,72 @@
     </div>
   </div>
 
+</div>
+
+<div class="card-deck mt-3">
+  <div class="card">
+    <h5 class="card-header">All Age</h5>
+    <div class="card-body">
+      <p>
+        Popular All-Age Songs
+      </p>
+      {% if all_age_photos %}
+      <a href="{% url 'song-view' all_age_photos.0.slug %}">
+        <img src="{{ all_age_photos.0.photo }}" class="img-fluid" />
+      </a>
+      {% endif %}
+      <table class="table table-striped">
+        <thead>
+          <th>Song</th>
+          <th>Plays</th>
+        </thead>
+        {% for song in all_age %}
+        <tr>
+          <td>
+            <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
+            {% if song.authors %}
+            <br />
+            <small>{{ song.authors }}</small>
+            {% endif %}
+          </td>
+          <td>
+            {{ song.setlist_count }}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
   </div>
+
+  <div class="card">
+    <h5 class="card-header">
+      <a href="{% url 'site-view' site.slug %}">
+        Recent Setlist
+      </a>
+    </h5>
+    <div class="card-body">
+      <p>
+        <a href="{% url 'setlist-view' site.recent_setlist.id %}">
+          <em>Setlist {{ site.recent_setlist.friendly_name }}</em>
+        </a>
+      </p>
+      <table class="table table-striped">
+        {% for song in site.recent_setlist.songs.all %}
+        <tr>
+          <td>
+            <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
+            {% if song.authors %}
+            <br />
+            <small>{{ song.authors }}</small>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+</div>
+
+
 {% endblock %}

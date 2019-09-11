@@ -202,12 +202,15 @@ class SiteView(DetailView):
     def get_context_data(self, **kwargs):
         site = kwargs.get('object')
         context = super().get_context_data(**kwargs)
-        topsongs = get_top_songs(site=site)[:10]
-        newsongs = get_newest_songs(site=site)[:10]
-        context['topsongs'] = topsongs
+        topsongs = get_top_songs(site=site)
+        newsongs = get_newest_songs(site=site)
+        all_age = get_top_songs(site=site, months=12).filter(all_age=True)
+        context['topsongs'] = topsongs[:10]
         context['topsongs_photos'] = photo_filter(topsongs)
-        context['newsongs'] = newsongs
+        context['newsongs'] = newsongs[:10]
         context['newsongs_photos'] = photo_filter(newsongs)
+        context['all_age'] = all_age
+        context['all_age_photos'] = photo_filter(all_age)
         return context
 
 
