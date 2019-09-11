@@ -10,7 +10,6 @@
       <p>
         Most frequently played songs in the last 6 months
       </p>
-      {{ topsongs.0.photo }}
       {% if topsongs.0.photo %}
       <a href="{% url 'song-view' topsongs.0.slug %}">
         <img src="{{ topsongs.0.photo }}" class="img-fluid" />
