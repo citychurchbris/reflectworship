@@ -73,6 +73,8 @@ class SongAdmin(admin.ModelAdmin):
     list_filter = (
         SiteSongFilter,
         'setlists__date',
+        'all_age',
+        'featured',
     )
 
     readonly_fields = (
