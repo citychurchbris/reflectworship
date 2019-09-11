@@ -58,14 +58,6 @@ def get_newest_songs(site=None, written_since=None):
     return newsongs
 
 
-def has_photo(item):
-    return bool(item.photo)
-
-
-def photo_filter(items):
-    return list(filter(has_photo, items))
-
-
 class HomeView(View):
 
     nsongs = 10
@@ -88,9 +80,7 @@ class HomeView(View):
             context={
                 'all_age': all_age[:self.nsongs],
                 'topsongs': topsongs[:self.nsongs],
-                'topsongs_photos': photo_filter(topsongs),
                 'newsongs': newsongs[:self.nsongs],
-                'newsongs_photos': photo_filter(newsongs),
                 'sites': Site.objects.all(),
             }
         )
@@ -206,11 +196,8 @@ class SiteView(DetailView):
         newsongs = get_newest_songs(site=site)
         all_age = get_top_songs(site=site, months=12).filter(all_age=True)
         context['topsongs'] = topsongs[:10]
-        context['topsongs_photos'] = photo_filter(topsongs)
         context['newsongs'] = newsongs[:10]
-        context['newsongs_photos'] = photo_filter(newsongs)
         context['all_age'] = all_age
-        context['all_age_photos'] = photo_filter(all_age)
         return context
 
 
