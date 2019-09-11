@@ -81,11 +81,6 @@
       <p>
         Popular All-Age Songs
       </p>
-      {% if all_age_photos %}
-      <a href="{% url 'song-view' all_age_photos.0.slug %}">
-        <img src="{{ all_age_photos.0.photo }}" class="img-fluid" />
-      </a>
-      {% endif %}
       <table class="table table-striped">
         <thead>
           <th>Song</th>
