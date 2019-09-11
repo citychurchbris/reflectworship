@@ -89,6 +89,13 @@ class Song(ModelBase):
         default=False,
     )
 
+    all_age = models.BooleanField(
+        help_text=(
+            'This song is recommended for all-age worship'
+            ),
+        default=False,
+    )
+
     youtube_url = models.URLField(
         blank=True,
         null=True,
@@ -109,6 +116,15 @@ class Song(ModelBase):
         null=True,
         blank=True,
     )
+
+    @property
+    def badges(self):
+        badges = []
+        if self.all_age:
+            badges.append('all-age')
+        if self.featured:
+            badges.append('featured')
+        return badges
 
     @property
     def last_played(self):

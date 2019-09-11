@@ -68,23 +68,28 @@ def photo_filter(items):
 
 class HomeView(View):
 
+    nsongs = 10
+
     def get(self, request):
         # Last 6 months of top songs
-        topsongs = get_top_songs()[:10]
+        topsongs = get_top_songs()
         newsongs = get_newest_songs()
         featured = Song.objects.filter(featured=True)
 
         # Add featured to top of new songs
         newsongs = list(featured) + list(newsongs.filter(featured=False))
-        newsongs = newsongs[:10]
+
+        # All age
+        all_age = topsongs.filter(all_age=True)
 
         return render(
             request,
             'reflectsongs/index.html',
             context={
-                'topsongs': topsongs,
+                'all_age': all_age[:self.nsongs],
+                'topsongs': topsongs[:self.nsongs],
                 'topsongs_photos': photo_filter(topsongs),
-                'newsongs': newsongs,
+                'newsongs': newsongs[:self.nsongs],
                 'newsongs_photos': photo_filter(newsongs),
                 'sites': Site.objects.all(),
             }

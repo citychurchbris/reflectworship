@@ -21,6 +21,9 @@
   <li class="list-group-item">
       <a href="{% url 'song-view' song.slug %}">{{ song }}</a>
       {% if song.authors %}<small>- {{ song.authors }}</small>{% endif %}
+      {% for badge in song.badges %}
+      <span class="badge badge-pill badge-success">{{ badge }}</span>
+      {% endfor %}
   </li>
   {% endfor %}
 </ul>

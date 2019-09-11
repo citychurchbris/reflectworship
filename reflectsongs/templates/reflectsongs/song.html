@@ -8,8 +8,12 @@
       {% block title %}{{ song.title }}{% endblock %}
     </h1>
 
-    {% if song.featured %}
-    <p><span class="badge badge-pill badge-success">Featured</span></p>
+    {% if song.badges %}
+    <p>
+      {% for badge in song.badges %}
+      <span class="badge badge-pill badge-success">{{ badge }}</span>
+      {% endfor %}
+    </p>
     {% endif %}
 
     <dl class="row">
