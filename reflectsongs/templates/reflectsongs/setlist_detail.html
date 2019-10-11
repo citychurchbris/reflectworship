@@ -3,7 +3,7 @@
 {% block content %}
 <h1>{% block title %}{{ setlist.friendly_name }}{% endblock %}</h1>
 
-  <div class="card">
+  <div class="card mb-3">
     <div class="card-body">
       <table class="table table-striped">
         {% for song in setlist.songs.all  %}
@@ -24,5 +24,10 @@
     </div>
   </div>
 
+  {% if request.user.is_staff %}
+  <p>
+    <a class="btn btn-outline-primary" href="{% url 'admin:reflectsongs_setlist_change' setlist.id %}">Edit</a>
+  </p>
+{% endif %}
 
 {% endblock %}

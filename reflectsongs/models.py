@@ -262,3 +262,6 @@ class Setlist(ModelBase):
         Song,
         related_name='setlists',
     )
+
+    def get_absolute_url(self):
+        return reverse('setlist-view', args=(self.id, ))
