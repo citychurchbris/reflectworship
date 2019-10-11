@@ -4,6 +4,7 @@ from pathlib import Path
 from time import sleep
 
 from django.conf import settings
+from django.db.models import Q
 from django.db.utils import IntegrityError
 from django.utils import timezone
 
@@ -59,6 +60,7 @@ class ProPresenterPlaylistImporter(object):
                 x.attrib['displayName'] for x in songs
                 if x.attrib['displayName'].lower() not in EXCLUDE_LOWER
             ]
+
             if len(song_names) < 2:
                 # unlikely to be a setlist
                 continue
@@ -70,6 +72,8 @@ class ProPresenterPlaylistImporter(object):
                     date = date_parser.parse(value)
                 except ValueError:
                     pass
+                else:
+                    break
 
             sunday = date + relativedelta.relativedelta(
                 weekday=relativedelta.SU(-1)
@@ -83,6 +87,7 @@ class ProPresenterPlaylistImporter(object):
         return data
 
     def _process_playlists(self, playlists, site):
+        added_songs = []
         for playlist in playlists:
             try:
                 setlist = Setlist.objects.create(
@@ -101,7 +106,17 @@ class ProPresenterPlaylistImporter(object):
                     title=songname,
                 )
                 setlist.songs.add(song)
+                added_songs.append(songname)
                 print('Added song: {}'.format(song))
+
+        if added_songs:
+            # Process the songs
+            song_importer = ProPresenterSongImporter()
+            song_importer.get_songs_from_dropbox(
+                site,
+                update=True,
+                names=added_songs,
+            )
 
 
 class ProPresenterSongImporter(object):
@@ -134,14 +149,20 @@ class ProPresenterSongImporter(object):
             all_items += self._process_dropbox_entries(batch.entries)
         return all_items
 
-    def get_songs_from_dropbox(self, site, update=True):
+    def get_songs_from_dropbox(self, site, update=True, names=None):
 
         songs_dir = (
             f'{settings.DROPBOX_PATH}/{site.name}/'
             '__Documents/Default/'
         )
         song_paths = self._get_all_dropbox_filepaths_in_folder(songs_dir)
-        logger.info('Found {len(songs_paths)} Songs')
+        if names:
+            # Limit to the given names
+            song_filenames = [f"{name}.pro6" for name in names]
+            song_paths = [song for song in song_paths
+                          if os.path.basename(song) in song_filenames]
+        else:
+            logger.info('Found {len(songs_paths)} Songs')
 
         dbx = dropbox.Dropbox(settings.DROPBOX_ACCESS_TOKEN)
         total = len(song_paths)
@@ -161,9 +182,13 @@ class ProPresenterSongImporter(object):
         # Check category
         category = tree.attrib.get('category')
         if category != 'Song':
+            print('Found non-song: {}'.format(item_title))
             # Delete if exists and no ccli number
             items_to_delete = Song.objects.filter(
-                title=item_title, ccli_number__exact='')
+                title=item_title,
+            ).filter(
+                Q(ccli_number__isnull=True) | Q(ccli_number__exact='')
+            )
             for item in items_to_delete:
                 print('Removing non-song: {}'.format(item))
                 item.delete()
@@ -211,4 +236,4 @@ class ProPresenterSongImporter(object):
         if pause:
             # Pause before contacting external sites again
             print('Pausing...')
-            sleep(3)
+            sleep(2)
