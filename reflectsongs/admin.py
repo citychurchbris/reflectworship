@@ -69,6 +69,7 @@ class SongAdmin(admin.ModelAdmin):
         'copyright_year',
         'play_count',
         'last_played',
+        'has_video',
     )
     list_filter = (
         SiteSongFilter,
@@ -132,6 +133,11 @@ class SongAdmin(admin.ModelAdmin):
             )
         return mark_safe(listing)
     setlist_display.short_description = 'Setlists'
+
+    def has_video(self, obj):
+        return bool(obj.youtube_url)
+    has_video.short_description = 'Video'
+    has_video.boolean = True
 
 
 admin.site.site_header = 'Reflect Worship Database'
