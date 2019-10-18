@@ -263,5 +263,13 @@ class Setlist(ModelBase):
         related_name='setlists',
     )
 
+    pp_uid = models.CharField(
+        "ProPresenter ID",
+        max_length=200,
+        blank=True,
+        null=True,
+        unique=True,
+    )
+
     def get_absolute_url(self):
         return reverse('setlist-view', args=(self.id, ))

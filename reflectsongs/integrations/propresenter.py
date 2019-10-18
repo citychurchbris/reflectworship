@@ -80,6 +80,7 @@ class ProPresenterPlaylistImporter(object):
             )
             data.append({
                 'date': sunday.date(),
+                'uid': pl.attrib['UUID'],
                 'name': pl.attrib['displayName'].strip(),
                 'songs': song_names,
             })
@@ -94,6 +95,7 @@ class ProPresenterPlaylistImporter(object):
                     site=site,
                     name=playlist['name'],
                     date=playlist['date'],
+                    pp_uid=playlist['uid'],
                 )
             except IntegrityError:
                 # Already exists - skip

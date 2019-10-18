@@ -43,6 +43,9 @@ class SetlistAdmin(admin.ModelAdmin):
         'site',
         'date',
     )
+    readonly_fields = (
+        'pp_uid',
+    )
 
     def nsongs(self, obj):
         return obj.songs.count()
