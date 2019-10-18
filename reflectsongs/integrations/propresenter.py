@@ -89,7 +89,11 @@ class ProPresenterPlaylistImporter(object):
 
     def _process_playlists(self, playlists, site):
         added_songs = []
+        today = timezone.now().date()
         for playlist in playlists:
+            if playlist['date'] > today:
+                print('Skipping FUTURE playlist: {}'.format(playlist['name']))
+                continue
             try:
                 setlist = Setlist.objects.create(
                     site=site,
