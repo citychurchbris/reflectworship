@@ -42,7 +42,7 @@ def yt_image(url):
     Get preview image from youtube video
     """
     ytid = yt_url_to_id(url)
-    return f'https://img.youtube.com/vi/{ytid}/maxresdefault.jpg'
+    return f'https://img.youtube.com/vi/{ytid}/hqdefault.jpg'
 
 
 def grab_songselect_video(songselect_url):
