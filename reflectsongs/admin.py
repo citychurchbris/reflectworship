@@ -64,6 +64,7 @@ class SongAdmin(admin.ModelAdmin):
     search_fields = (
         'title',
         'authors',
+        'ccli_number',
     )
     list_display = (
         'title',
