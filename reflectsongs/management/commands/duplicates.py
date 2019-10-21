@@ -23,7 +23,7 @@ class Command(BaseCommand):
         for ccli_number in duplicate_ccli_numbers:
             if not ccli_number:
                 continue
-            print(f"Duplicate: {ccli_number}")
+            print(f"Duplicates found for: {ccli_number}")
             self.merge_ccli_number(ccli_number, options['dry_run'])
 
     def merge_ccli_number(self, ccli_number, dry_run=False):
