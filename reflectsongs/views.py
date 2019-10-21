@@ -153,6 +153,10 @@ class SetlistList(ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        # Don't include setlists with no songs
+        queryset = queryset.annotate(song_count=Count('songs')).filter(
+            song_count__gte=1,
+        )
         filter_song = self.get_filter_song()
         if filter_song:
             queryset = queryset.filter(songs=filter_song)

@@ -261,6 +261,7 @@ class Setlist(ModelBase):
     songs = models.ManyToManyField(
         Song,
         related_name='setlists',
+        blank=True,
     )
 
     pp_uid = models.CharField(
