@@ -21,6 +21,8 @@ class Command(BaseCommand):
             ccli_number__isnull=False
         ).values_list('ccli_number', flat=True)
         for ccli_number in duplicate_ccli_numbers:
+            if not ccli_number:
+                continue
             print(f"Duplicate: {ccli_number}")
             self.merge_ccli_number(ccli_number, options['dry_run'])
 
