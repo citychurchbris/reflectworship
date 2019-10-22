@@ -40,7 +40,7 @@ def get_top_songs(site=None, months=6):
         site=site,
         from_date=today - relativedelta(months=6)
     ).filter(setlist_count__gte=1)
-    return songs.order_by('-setlist_count')
+    return songs.order_by('-setlist_count', 'title')
 
 
 def get_newest_songs(site=None, written_since=None):
