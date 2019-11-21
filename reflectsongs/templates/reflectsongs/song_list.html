@@ -11,6 +11,20 @@
   {{ page_obj.paginator.count }} results for: <em>{{ search_query }}</em>
 </p>
 {% else %}
+<p class="song-range">
+  <a href="{% url 'song-list' %}"
+     class="{% filteractive request 'range' '' %}">
+    All time
+  </a> |
+  <a href="{% url 'song-list' %}?range=12m"
+     class="{% filteractive request 'range' '12m' %}">
+    Last 12 months
+  </a> |
+  <a href="{% url 'song-list' %}?range=6m"
+     class="{% filteractive request 'range' '6m' %}">
+    Last 6 months
+  </a>
+</p>
 <p>
   {{ page_obj.paginator.count }} results
 </p>
@@ -24,6 +38,7 @@
       {% for badge in song.badges %}
       <span class="badge badge-pill badge-success">{{ badge }}</span>
       {% endfor %}
+      <span class="badge badge-secondary float-right">{{ song.setlist_count }} plays</span>
   </li>
   {% endfor %}
 </ul>

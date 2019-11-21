@@ -35,3 +35,7 @@ img.thumb {
 #song-downloads .list-group-item {
     padding-left: 0;
 }
+
+.song-range a.active {
+    color: #333;
+}

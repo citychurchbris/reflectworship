@@ -13,6 +13,13 @@ def navactive(request, url):
 
 
 @register.simple_tag
+def filteractive(request, filtername, val):
+    if request.GET.get(filtername, '') == val:
+        return "active"
+    return ""
+
+
+@register.simple_tag
 def root_url():
     return settings.ROOT_URL
 

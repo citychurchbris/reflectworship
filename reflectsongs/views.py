@@ -38,7 +38,7 @@ def get_top_songs(site=None, months=6):
     today = datetime.date.today()
     songs = get_song_queryset(
         site=site,
-        from_date=today - relativedelta(months=6)
+        from_date=today - relativedelta(months=months)
     ).filter(setlist_count__gte=1)
     return songs.order_by('-setlist_count', 'title')
 
@@ -125,6 +125,20 @@ class SongList(ListView):
     model = Song
     context_object_name = 'songs'
     paginate_by = 10
+
+    date_mapping = {
+        '12m': 12,
+        '6m': 6,
+    }
+
+    def get_range_query(self):
+        return self.request.GET.get('range', '')
+
+    def get_queryset(self):
+        date_range = self.get_range_query()
+        months = self.date_mapping.get(date_range, 999)
+        queryset = get_top_songs(site=None, months=months)
+        return queryset
 
 
 class Search(SongList):
