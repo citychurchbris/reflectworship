@@ -109,6 +109,9 @@ WSGI_APPLICATION = 'reflectworship.wsgi.application'
 DROPBOX_ACCESS_TOKEN = os.getenv('DROPBOX_ACCESS_TOKEN')
 DROPBOX_PATH = os.getenv('DROPBOX_PATH')
 
+# Songselect
+SONGSELECT_USERNAME = os.getenv('SONGSELECT_USERNAME')
+SONGSELECT_PASSWORD = os.getenv('SONGSELECT_PASSWORD')
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
