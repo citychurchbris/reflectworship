@@ -87,6 +87,11 @@
     <p>
       {{ song.lyrics | linebreaks }}
     </p>
+    {% if song.copyright_info %}
+    <p>
+      <em>{{ song.copyright_info }}</em>
+    </p>
+    {% endif %}
   {% endif %}
   </div>
 

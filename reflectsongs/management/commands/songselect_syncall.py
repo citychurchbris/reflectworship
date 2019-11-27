@@ -1,23 +1,28 @@
-from pprint import pprint
+from time import sleep
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from reflectsongs.integrations.songselect import SongSelectImporter
+from reflectsongs.views import get_top_songs
 
 
 class Command(BaseCommand):
-    help = 'Test the SongSelect import'
+    help = 'Run full SongSelect import'
 
     def add_arguments(self, parser):
-        parser.add_argument('ccli_number')
+        parser.add_argument('--limit', type=int, default=10)
 
     def handle(self, *args, **options):
-        ccli_number = options.get('ccli_number')
+        limit = options.get('limit')
         importer = SongSelectImporter()
+        print('Logging in')
         importer.login(
             username=settings.SONGSELECT_USERNAME,
             password=settings.SONGSELECT_PASSWORD,
         )
-        songdata = importer.get_songdata(ccli_number)
-        pprint(songdata)
+        songs = get_top_songs()
+        for song in songs[:limit]:
+            print(f'Syncing {song}')
+            importer.sync_song(song)
+            sleep(1)

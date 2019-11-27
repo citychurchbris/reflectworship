@@ -160,13 +160,25 @@ class SongSelectImporter(object):
                     song_verse['lyrics'] += '\n'
             song_verse['lyrics'] = song_verse['lyrics'].strip(' \n\r\t')
             songdata['verses'].append(song_verse)
+        songdata['lyrics'] = '\n\n'.join([
+            v['lyrics'] for v in songdata['verses']
+        ])
         return songdata
 
     def sync_song(self, song):
         songdata = self.get_songdata(song.ccli_number)
+        if not songdata:
+            logger.warning(f'No song data for {song}')
+            return
         for themename in songdata.get('topics', []):
             theme, created = Theme.objects.get_or_create(name=themename)
             if created:
                 logger.info(f'Added theme: {theme}')
             song.themes.add(theme)
+        copyright_info = songdata.get('copyright')
+        if copyright_info:
+            song.copyright_info = copyright_info
+        lyrics = songdata.get('lyrics')
+        if lyrics:
+            song.lyrics = lyrics
         song.save()

@@ -86,6 +86,12 @@ class Song(ModelBase):
         null=True,
     )
 
+    copyright_info = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+    )
+
     themes = models.ManyToManyField(
         Theme,
         related_name='songs',
