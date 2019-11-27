@@ -8,7 +8,23 @@ from django.utils.safestring import mark_safe
 from easy_select2 import Select2Multiple
 
 from reflectsongs.filters import SiteSongFilter
-from reflectsongs.models import ChordResource, Setlist, Site, Song
+from reflectsongs.models import ChordResource, Setlist, Site, Song, Theme
+
+
+@admin.register(Theme)
+class ThemeAdmin(admin.ModelAdmin):
+    ordering = (
+        'songs__count',
+    )
+    list_display = (
+        'name',
+        'nsongs',
+    )
+
+    def nsongs(self, obj):
+        return obj.songs.count()
+    nsongs.short_description = 'Songs'
+    nsongs.admin_order_field = 'songs__count'
 
 
 @admin.register(Site)
@@ -56,8 +72,17 @@ class ChordResourceInline(admin.TabularInline):
     model = ChordResource
 
 
+class SongForm(forms.ModelForm):
+
+    class Meta:
+        widgets = {
+            'themes': Select2Multiple(),
+        }
+
+
 @admin.register(Song)
 class SongAdmin(admin.ModelAdmin):
+    form = SongForm
     inlines = (
         ChordResourceInline,
     )

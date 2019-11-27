@@ -44,6 +44,18 @@ class Site(ModelBase):
         return self.setlists.first()
 
 
+class Theme(ModelBase):
+    """
+    A theme/category
+    """
+    def __str__(self):
+        return self.name
+
+    name = models.CharField(
+        max_length=200,
+    )
+
+
 class Song(ModelBase):
     """
     A worship song
@@ -72,6 +84,12 @@ class Song(ModelBase):
     copyright_year = models.IntegerField(
         blank=True,
         null=True,
+    )
+
+    themes = models.ManyToManyField(
+        Theme,
+        related_name='songs',
+        blank=True,
     )
 
     ccli_number = models.CharField(
