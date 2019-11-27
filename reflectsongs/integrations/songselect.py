@@ -31,6 +31,8 @@ from urllib.request import HTTPCookieProcessor, URLError, build_opener
 
 from bs4 import BeautifulSoup, NavigableString
 
+from reflectsongs.models import Theme
+
 USER_AGENTS = [
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) '
     'Chrome/52.0.2743.116 Safari/537.36',
@@ -102,7 +104,7 @@ class SongSelectImporter(object):
         else:
             return posted_page
 
-    def get_song(self, ccli_number):
+    def get_songdata(self, ccli_number):
         """
         Get the full song details from SongSelect
 
@@ -112,7 +114,7 @@ class SongSelectImporter(object):
         """
         song_url = SONG_URL_BASE.format(ccli_number=ccli_number)
         logger.debug(f'Grabbing song from {song_url}')
-        song = {}
+        songdata = {}
         try:
             song_page = BeautifulSoup(self.opener.open(song_url).read(), 'lxml')
         except (TypeError, URLError) as error:
@@ -138,15 +140,15 @@ class SongSelectImporter(object):
             if ul.find('li', string=themes_regex):
                 theme_elements.extend(ul.find_all('li')[1:])
 
-        song['copyright'] = '/'.join(
+        songdata['copyright'] = '/'.join(
             [unescape(li.string).strip() for li in copyright_elements]
         )
-        song['topics'] = [unescape(li.string).strip() for li in theme_elements]
-        song['ccli_number'] = song_page.find(
+        songdata['topics'] = [unescape(li.string).strip() for li in theme_elements]
+        songdata['ccli_number'] = song_page.find(
             'div', 'song-content-data').find('ul').find('li')\
             .find('strong').string.strip()
 
-        song['verses'] = []
+        songdata['verses'] = []
         verses = lyrics_page.find('div', 'song-viewer lyrics').find_all('p')
         verse_labels = lyrics_page.find('div', 'song-viewer lyrics').find_all('h3')
         for verse, label in zip(verses, verse_labels):
@@ -157,5 +159,14 @@ class SongSelectImporter(object):
                 else:
                     song_verse['lyrics'] += '\n'
             song_verse['lyrics'] = song_verse['lyrics'].strip(' \n\r\t')
-            song['verses'].append(song_verse)
-        return song
+            songdata['verses'].append(song_verse)
+        return songdata
+
+    def sync_song(self, song):
+        songdata = self.get_songdata(song.ccli_number)
+        for themename in songdata.get('topics', []):
+            theme, created = Theme.objects.get_or_create(name=themename)
+            if created:
+                logger.info(f'Added theme: {theme}')
+            song.themes.add(theme)
+        song.save()
