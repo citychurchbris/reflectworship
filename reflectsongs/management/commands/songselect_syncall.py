@@ -12,6 +12,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--limit', type=int, default=10)
+        parser.add_argument('--months', type=int, default=6)
 
     def handle(self, *args, **options):
         limit = options.get('limit')
@@ -21,10 +22,18 @@ class Command(BaseCommand):
             username=settings.SONGSELECT_USERNAME,
             password=settings.SONGSELECT_PASSWORD,
         )
-        songs = get_top_songs().filter(themes__isnull=True)
-        for song in songs[:limit]:
+        songs = get_top_songs(
+            months=options.get('months')
+        )
+        done = 0
+        for song in songs.all():
             if not song.ccli_number:
+                continue
+            if song.lyrics:
                 continue
             print(f'Syncing {song}')
             importer.sync_song(song)
+            done += 1
+            if done > limit:
+                break
             sleep(1)
