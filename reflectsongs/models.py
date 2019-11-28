@@ -55,6 +55,15 @@ class Theme(ModelBase):
         max_length=200,
     )
 
+    slug = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+
+    def save(self, **kwargs):
+        unique_slugify(self, self.name)
+        super().save(**kwargs)
+
 
 class Song(ModelBase):
     """

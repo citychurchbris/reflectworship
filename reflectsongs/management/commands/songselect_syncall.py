@@ -23,6 +23,8 @@ class Command(BaseCommand):
         )
         songs = get_top_songs().filter(themes__isnull=True)
         for song in songs[:limit]:
+            if not song.ccli_number:
+                continue
             print(f'Syncing {song}')
             importer.sync_song(song)
             sleep(1)

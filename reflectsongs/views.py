@@ -7,7 +7,7 @@ from django.views.generic import DetailView, ListView
 
 from dateutil.relativedelta import relativedelta
 
-from reflectsongs.models import ChordResource, Setlist, Site, Song
+from reflectsongs.models import ChordResource, Setlist, Site, Song, Theme
 from reflectsongs.utils import yt_embed
 
 
@@ -146,16 +146,27 @@ class Search(SongList):
     def get_search_query(self):
         return self.request.GET.get('q', '')
 
+    def get_theme_query(self):
+        return self.request.GET.get('theme', '')
+
     def get_queryset(self):
         queryset = super().get_queryset()
         search_query = self.get_search_query()
+        theme_query = self.get_theme_query()
         if search_query:
             queryset = queryset.filter(title__search=search_query)
+        if theme_query:
+            queryset = queryset.filter(themes__slug=theme_query)
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['search_query'] = self.get_search_query()
+        query_data = self.get_search_query()
+        theme_query = self.get_theme_query()
+        if theme_query:
+            theme = Theme.objects.get(slug=theme_query)
+            query_data = f"Theme: {theme}"
+        context['search_query'] = query_data
         return context
 
 

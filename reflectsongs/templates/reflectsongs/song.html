@@ -18,10 +18,27 @@
 
     <dl class="row">
       <dt class="col-sm-3">Authors</dt>
-      <dd class="col-sm-9">{{ song.authors }}</dd>
+      <dd class="col-sm-9">
+        {% if song.authors %}
+        {{ song.authors }}
+        {% else %}
+        <em>Unknown</em>
+        {% endif %}
+      </dd>
 
+      {% if song.themes.count %}
+      <dt class="col-sm-3">Themes</dt>
+      <dd class="col-sm-9">
+        {% for theme in song.themes.all %}
+        <a href="{% url 'search' %}?theme={{ theme.slug }}">{{ theme }}</a>{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </dd>
+      {% endif %}
+
+      {% if song.copyright_year %}
       <dt class="col-sm-3">Copyright</dt>
       <dd class="col-sm-9">{{ song.copyright_year }}</dd>
+      {% endif %}
 
       <dt class="col-sm-3">Plays</dt>
       <dd class="col-sm-9">
