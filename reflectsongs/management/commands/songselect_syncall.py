@@ -21,7 +21,7 @@ class Command(BaseCommand):
             username=settings.SONGSELECT_USERNAME,
             password=settings.SONGSELECT_PASSWORD,
         )
-        songs = get_top_songs()
+        songs = get_top_songs().filter(themes__isnull=True)
         for song in songs[:limit]:
             print(f'Syncing {song}')
             importer.sync_song(song)

@@ -118,7 +118,7 @@ class SongSelectImporter(object):
         try:
             song_page = BeautifulSoup(self.opener.open(song_url).read(), 'lxml')
         except (TypeError, URLError) as error:
-            logger.exception(
+            logger.error(
                 'Could not get song from SongSelect, {error}'.format(
                     error=error
                 ))

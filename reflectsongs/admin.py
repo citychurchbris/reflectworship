@@ -13,18 +13,23 @@ from reflectsongs.models import ChordResource, Setlist, Site, Song, Theme
 
 @admin.register(Theme)
 class ThemeAdmin(admin.ModelAdmin):
-    ordering = (
-        'songs__count',
-    )
     list_display = (
         'name',
         'nsongs',
     )
 
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+
+        queryset = queryset.annotate(
+            _song_count=Count('songs', distinct=True),
+        )
+        return queryset
+
     def nsongs(self, obj):
         return obj.songs.count()
     nsongs.short_description = 'Songs'
-    nsongs.admin_order_field = 'songs__count'
+    nsongs.admin_order_field = '_song_count'
 
 
 @admin.register(Site)
