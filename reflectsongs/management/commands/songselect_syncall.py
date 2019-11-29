@@ -1,4 +1,5 @@
 from time import sleep
+import random
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -36,4 +37,4 @@ class Command(BaseCommand):
             done += 1
             if done > limit:
                 break
-            sleep(1)
+            sleep(random.randint(1,3))
