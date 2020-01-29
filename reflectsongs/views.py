@@ -1,5 +1,6 @@
 import datetime
 
+from django.db import connection
 from django.db.models import Count, Max, Min, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
@@ -238,3 +239,53 @@ class DownloadResource(View):
             pk=pk,
         )
         return redirect(resource.attachment.url)
+
+
+class Stats(View):
+
+    def get(self, request):
+        sql = (
+            "SELECT * FROM ts_stat("
+            "'SELECT to_tsvector(''simple'', lyrics) FROM reflectsongs_song')"
+        )
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            data = cursor.fetchall()
+
+        COMMON_WORDS = (
+            "the",
+            "and",
+            "of",
+            "is",
+            "to",
+            "in",
+            "a",
+            "be",
+            "it",
+        )
+
+        words = []
+        for item in data:
+            word, ndocs, nwords = item
+            if word in COMMON_WORDS:
+                continue
+            words.append({
+                'word': word,
+                'ndocs': ndocs,
+                'nwords': nwords,
+            })
+        words_by_count = sorted(words,
+                                key=lambda x: x['nwords'], reverse=True)
+        words_by_song = sorted(words,
+                               key=lambda x: x['ndocs'], reverse=True)
+
+        context = {
+            'words_by_count': words_by_count,
+            'words_by_song': words_by_song,
+        }
+
+        return render(
+            request,
+            'reflectsongs/stats.html',
+            context=context,
+        )

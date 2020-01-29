@@ -1,0 +1,46 @@
+{% extends 'reflectsongs/base.html' %}
+
+{% block title %}Stats{% endblock %}
+{% block content %}
+
+<h1>
+  Statistics
+</h1>
+
+<p>
+  Unique words found: {{ words_by_count|length }}
+</p>
+
+<div class="card-deck">
+
+  <div class="card">
+    <h5 class="card-header">Top Words by Count</h5>
+    <div class="card-body">
+      <table class="table table-striped">
+        {% for word in words_by_count %}
+        <tr>
+          <td><b>{{ word.word }}</b></td>
+          <td>{{ word.nwords }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h5 class="card-header">Top Words by # Songs</h5>
+    <div class="card-body">
+      <table class="table table-striped">
+        {% for word in words_by_song %}
+        <tr>
+          <td><b>{{ word.word }}</b></td>
+          <td>{{ word.ndocs }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}
