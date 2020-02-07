@@ -3,31 +3,43 @@
 {% block title %}Stats{% endblock %}
 {% block content %}
 
-<h1>
-  Statistics
-</h1>
+<div class="row">
+  <div class="col-sm-12 col-md-6">
 
-<p>
-  Unique words found: {{ words_by_count|length }}
-</p>
+    <h1>
+      Statistics
+    </h1>
 
-<p>
-  <canvas id="trinity-count" class="chart" data-values="{{ trinity_data.values | str }}"></canvas>
-  {{ trinity_data.values|json_script:"trinity-count-data" }}
-</p>
-<p>
-  By words:
-  {% for mem, vals in trinity_data.items %}
-  {{ mem.value }}: {% widthratio vals.songs trinity_totals.songs 100 %}%
-  <br />
-  {% endfor %}
-</p>
-<p>
-  {{ trinity_data }}
-  {{ trinity_totals }}
-</p>
+    <p>
+      Songs: {{ song_count }}
+      <br />
+      Setlists: {{ setlist_count }}
+      <br />
+      Unique words: {{ words_by_count|length }}
+    </p>
 
-<div class="card-deck">
+  </div>
+  <div class="col-sm-12 col-md-6">
+
+    <div class="card">
+      <h5 class="card-header">Trinitarian Rating</h5>
+      <div class="card-body">
+        <canvas id="trinity-count"></canvas>
+        {{ trinity_data|json_script:"trinity-count-data" }}
+        <p class="text-center">
+          <small>
+            Outer: By Count
+            <br />
+            Inner: By Songs
+          </small>
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="card-deck mt-3">
 
   <div class="card">
     <h5 class="card-header">Top Words by Count</h5>

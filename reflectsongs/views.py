@@ -279,7 +279,7 @@ class Words(View):
             'songs': 0,
         }
         trinity_data = dict([
-            (mem, {'count': 0, 'songs': 0}) for mem in Trinity
+            (mem, {'name': mem.value, 'count': 0, 'songs': 0}) for mem in Trinity
         ])
 
         for item in data:
@@ -304,10 +304,11 @@ class Words(View):
                                key=lambda x: x['ndocs'], reverse=True)
 
         context = {
+            'song_count': Song.objects.count(),
+            'setlist_count': Setlist.objects.count(),
             'words_by_count': words_by_count,
             'words_by_song': words_by_song,
-            'trinity_data': trinity_data,
-            'trinity_totals': trinity_totals,
+            'trinity_data': list(trinity_data.values()),
         }
 
         return render(
