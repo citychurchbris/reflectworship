@@ -1,4 +1,5 @@
 import datetime
+from enum import Enum
 
 from django.db import connection
 from django.db.models import Count, Max, Min, Q
@@ -10,6 +11,13 @@ from dateutil.relativedelta import relativedelta
 
 from reflectsongs.models import ChordResource, Setlist, Site, Song, Theme
 from reflectsongs.utils import yt_embed
+
+
+class Trinity(Enum):
+
+    FATHER = "Father"
+    JESUS = "Jesus"
+    SPIRIT = "Spirit"
 
 
 def get_song_queryset(site=None, from_date=None):
@@ -241,39 +249,55 @@ class DownloadResource(View):
         return redirect(resource.attachment.url)
 
 
-class Stats(View):
+class Words(View):
 
     def get(self, request):
         sql = (
             "SELECT * FROM ts_stat("
-            "'SELECT to_tsvector(''simple'', lyrics) FROM reflectsongs_song')"
+            "'SELECT to_tsvector(''english'', lyrics) FROM reflectsongs_song')"
         )
         with connection.cursor() as cursor:
             cursor.execute(sql)
             data = cursor.fetchall()
 
-        COMMON_WORDS = (
-            "the",
-            "and",
-            "of",
-            "is",
-            "to",
-            "in",
-            "a",
-            "be",
-            "it",
+        IGNORE_WORDS = (
+            "4x",
+            "2x",
+            "3x",
         )
 
+        TRINITY_MAPPING = {
+            'jesus': Trinity.JESUS,
+            'son': Trinity.JESUS,
+            'father': Trinity.FATHER,
+            'spirit': Trinity.SPIRIT,
+        }
+
         words = []
+        trinity_totals = {
+            'count': 0,
+            'songs': 0,
+        }
+        trinity_data = dict([
+            (mem, {'count': 0, 'songs': 0}) for mem in Trinity
+        ])
+
         for item in data:
             word, ndocs, nwords = item
-            if word in COMMON_WORDS:
+            if word in IGNORE_WORDS:
                 continue
             words.append({
                 'word': word,
                 'ndocs': ndocs,
                 'nwords': nwords,
             })
+            if word in TRINITY_MAPPING:
+                mem = TRINITY_MAPPING.get(word)
+                trinity_data[mem]['count'] += nwords
+                trinity_totals['count'] += nwords
+                trinity_data[mem]['songs'] += ndocs
+                trinity_totals['songs'] += ndocs
+
         words_by_count = sorted(words,
                                 key=lambda x: x['nwords'], reverse=True)
         words_by_song = sorted(words,
@@ -282,10 +306,12 @@ class Stats(View):
         context = {
             'words_by_count': words_by_count,
             'words_by_song': words_by_song,
+            'trinity_data': trinity_data,
+            'trinity_totals': trinity_totals,
         }
 
         return render(
             request,
-            'reflectsongs/stats.html',
+            'reflectsongs/words.html',
             context=context,
         )
