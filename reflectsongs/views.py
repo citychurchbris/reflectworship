@@ -316,6 +316,7 @@ class Words(View):
             'words_by_count': words_by_count,
             'words_by_song': words_by_song,
             'trinity_data': list(trinity_data.values()),
+            'months': months,
         }
 
         return render(
