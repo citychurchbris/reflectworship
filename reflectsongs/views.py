@@ -252,11 +252,19 @@ class DownloadResource(View):
 class Words(View):
 
     def get(self, request):
-        sql = (
-            "SELECT * FROM ts_stat("
-            "'SELECT to_tsvector(''english'', lyrics) FROM reflectsongs_song')"
-        )
+        months = int(request.GET.get('months', 6))
+        topsongs = get_top_songs(months=months)
+        topsong_ids = topsongs.values_list('id', flat=True)
+
         with connection.cursor() as cursor:
+            inner = cursor.mogrify(
+                "SELECT to_tsvector('english', lyrics) FROM reflectsongs_song "
+                "WHERE id = ANY(%s)",
+                (list(topsong_ids), ),
+            )
+            sql = (
+                "SELECT * FROM ts_stat('{inner}')"
+            ).format(inner=inner.decode('utf-8').replace("'", "''"))
             cursor.execute(sql)
             data = cursor.fetchall()
 
@@ -304,8 +312,7 @@ class Words(View):
                                key=lambda x: x['ndocs'], reverse=True)
 
         context = {
-            'song_count': Song.objects.count(),
-            'setlist_count': Setlist.objects.count(),
+            'song_count': topsongs.count(),
             'words_by_count': words_by_count,
             'words_by_song': words_by_song,
             'trinity_data': list(trinity_data.values()),
