@@ -56,7 +56,7 @@ def get_newest_songs(site=None, written_since=None):
     """ Newest songs that were written since x """
     if written_since is None:
         today = datetime.date.today()
-        written_since = today.year - 3
+        written_since = today.year - 5
 
     songs = get_song_queryset(site=site)
     newsongs = songs.filter(
