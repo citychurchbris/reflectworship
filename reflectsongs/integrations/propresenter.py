@@ -69,7 +69,7 @@ class ProPresenterPlaylistImporter(object):
             for attr in ('displayName', 'modifiedDate'):
                 value = pl.attrib[attr]
                 try:
-                    date = date_parser.parse(value)
+                    date = date_parser.parse(value, dayfirst=True)
                 except ValueError:
                     pass
                 else:
@@ -92,7 +92,7 @@ class ProPresenterPlaylistImporter(object):
         today = timezone.now().date()
         for playlist in playlists:
             if playlist['date'] > today:
-                print('Skipping FUTURE playlist: {}'.format(playlist['name']))
+                print('Skipping FUTURE playlist: {} {}'.format(playlist['name'], playlist['date']))
                 continue
             try:
                 setlist = Setlist.objects.create(
