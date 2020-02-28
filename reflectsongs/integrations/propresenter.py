@@ -190,7 +190,8 @@ class ProPresenterSongImporter(object):
 
         # Check category
         category = tree.attrib.get('category')
-        if category != 'Song':
+        ccli = tree.attrib.get('CCLISongNumber')
+        if category != 'Song' and not ccli:
             print('Found non-song: {}'.format(item_title))
             # Delete if exists and no ccli number
             items_to_delete = Song.objects.filter(
