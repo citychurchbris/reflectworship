@@ -59,6 +59,7 @@ class SetlistAdmin(admin.ModelAdmin):
         'date',
         'name',
         'nsongs',
+        'import_date',
     )
     list_filter = (
         'site',

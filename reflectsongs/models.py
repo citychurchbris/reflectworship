@@ -297,6 +297,17 @@ class Setlist(ModelBase):
         blank=True,
     )
 
+    source = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+    )
+
+    import_date = models.DateTimeField(
+        blank=True,
+        null=True,
+    )
+
     pp_uid = models.CharField(
         "ProPresenter ID",
         max_length=200,

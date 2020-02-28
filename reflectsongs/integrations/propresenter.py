@@ -92,7 +92,8 @@ class ProPresenterPlaylistImporter(object):
         today = timezone.now().date()
         for playlist in playlists:
             if playlist['date'] > today:
-                print('Skipping FUTURE playlist: {} {}'.format(playlist['name'], playlist['date']))
+                print('Skipping FUTURE playlist: {} {}'.format(
+                    playlist['name'], playlist['date']))
                 continue
             try:
                 setlist = Setlist.objects.create(
@@ -100,6 +101,8 @@ class ProPresenterPlaylistImporter(object):
                     name=playlist['name'],
                     date=playlist['date'],
                     pp_uid=playlist['uid'],
+                    source='ProPresenter',
+                    import_date=timezone.now(),
                 )
             except IntegrityError:
                 # Already exists - skip
