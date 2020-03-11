@@ -68,8 +68,10 @@ class ProPresenterPlaylistImporter(object):
             date = None
             for attr in ('displayName', 'modifiedDate'):
                 value = pl.attrib[attr]
+                # If this is an actual date, it is probably not dayfirst
+                dayfirst = 'Date' not in attr
                 try:
-                    date = date_parser.parse(value, dayfirst=True)
+                    date = date_parser.parse(value, dayfirst=dayfirst)
                 except ValueError:
                     pass
                 else:
@@ -106,7 +108,7 @@ class ProPresenterPlaylistImporter(object):
                 )
             except IntegrityError:
                 # Already exists - skip
-                print('Skipping: {}'.format(playlist['name']))
+                print('Skipping existing playlist: {}'.format(playlist['name']))
                 continue
 
             print('Created setlist: {}'.format(setlist))
