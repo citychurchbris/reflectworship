@@ -123,13 +123,18 @@ class SongSelectImporter(object):
                     error=error
                 ))
             return None
-        lyrics_link = song_page.find('a', title='View song lyrics')['href']
-        try:
-            lyrics_page = BeautifulSoup(
-                self.opener.open(BASE_URL + lyrics_link).read(), 'lxml')
-        except (TypeError, URLError):
+        lyrics_link = song_page.find('a', title='View song lyrics')
+        if lyrics_link:
+            try:
+                lyrics_page = BeautifulSoup(
+                    self.opener.open(BASE_URL + lyrics_link['href']).read(), 'lxml')
+            except (TypeError, URLError):
+                logger.exception('Could not get lyrics from SongSelect')
+                return None
+        else:
             logger.exception('Could not get lyrics from SongSelect')
             return None
+
         copyright_elements = []
         theme_elements = []
         copyrights_regex = re.compile(r'\bCopyrights\b')
@@ -144,9 +149,15 @@ class SongSelectImporter(object):
             [unescape(li.string).strip() for li in copyright_elements]
         )
         songdata['topics'] = [unescape(li.string).strip() for li in theme_elements]
-        songdata['ccli_number'] = song_page.find(
-            'div', 'song-content-data').find('ul').find('li')\
-            .find('strong').string.strip()
+        songdata['ccli_number'] = None
+        songdata['original_key'] = None
+        content_data = song_page.find(
+            'div', 'song-content-data').find('ul')
+        for li in content_data.findAll('li'):
+            if 'Song Number' in li.text:
+                songdata['ccli_number'] = li.find('strong').string.strip()
+            elif 'Original Key' in li.text:
+                songdata['original_key'] = li.find('strong').string.strip()
 
         songdata['verses'] = []
         verses = lyrics_page.find('div', 'song-viewer lyrics').find_all('p')
