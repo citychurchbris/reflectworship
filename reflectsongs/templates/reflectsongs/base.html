@@ -48,6 +48,7 @@
         </ul>
         <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}">
           <input class="form-control mr-sm-2" type="search"
+                 accesskey="/"
                  name="q"
                  value="{{ request.GET.q }}"
                  placeholder="Song Search" aria-label="Search" />
