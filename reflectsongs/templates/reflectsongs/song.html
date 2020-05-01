@@ -100,7 +100,10 @@
 
   <div class="col-sm-12 col-md-6">
   {% if song.lyrics %}
-    <h4>Lyrics</h4>
+  <h4>Lyrics</h4>
+  <p>
+    <a href="{% url 'song-show' song.slug %}">&raquo; Presentation mode</a>
+  </p>
     <p>
       {{ song.lyrics | linebreaks }}
     </p>

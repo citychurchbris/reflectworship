@@ -1,0 +1,21 @@
+<html>
+	<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/reveal.min.css" integrity="sha256-OxiHrn+gXudPDHxTvXiQzeFjZU/FllSSPmOOYAZ1O/g=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/theme/white.min.css" integrity="sha256-yrL16TdyPisf02WLfBiRl4ST24aYQM/lYN1vhrhc0O8=" crossorigin="anonymous" />
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+        {% for section in sections %}
+        <section>{{ section  | linebreaks }}</section>
+        {% endfor %}
+			</div>
+		</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/js/reveal.min.js" integrity="sha256-pv4AarTAzSO6lz+bbMPwmV29XMjkzmFOn601b2pWqXE=" crossorigin="anonymous"></script>
+		<script>
+			Reveal.initialize({
+	      transition: 'fade'
+      });
+		</script>
+	</body>
+</html>

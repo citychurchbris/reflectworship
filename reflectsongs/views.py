@@ -129,6 +129,25 @@ class SongView(View):
         )
 
 
+class SongPresentation(View):
+
+    def get(self, request, song_slug):
+        song = get_object_or_404(Song, slug=song_slug)
+
+        lyric_sections = song.lyrics.split('\n\n')
+
+        context = {
+            'song': song,
+            'sections': lyric_sections
+        }
+
+        return render(
+            request,
+            'reflectsongs/song_presentation.html',
+            context=context,
+        )
+
+
 class SongList(ListView):
 
     model = Song

@@ -6,7 +6,7 @@ from django.views.generic import TemplateView
 
 from reflectsongs.views import (DownloadResource, HomeView, Search,
                                 SetlistList, SetlistView, SiteList, SiteView,
-                                SongList, SongView, Words)
+                                SongList, SongPresentation, SongView, Words)
 
 urlpatterns = [
     path('robots.txt', TemplateView.as_view(
@@ -20,6 +20,8 @@ urlpatterns = [
 
     # Songs
     path('songs/<slug:song_slug>/', SongView.as_view(), name='song-view'),
+    path('songs/<slug:song_slug>/show', SongPresentation.as_view(),
+         name='song-show'),
     path('songs/', SongList.as_view(), name='song-list'),
 
     # Downloads
