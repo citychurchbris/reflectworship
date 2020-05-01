@@ -134,7 +134,10 @@ class SongPresentation(View):
     def get(self, request, song_slug):
         song = get_object_or_404(Song, slug=song_slug)
 
-        lyric_sections = song.lyrics.split('\n\n')
+        if '\n\n' in song.lyrics:
+            lyric_sections = song.lyrics.split('\n\n')
+        else:
+            lyric_sections = song.lyrics.split('\r\n\r\n')
 
         context = {
             'song': song,
