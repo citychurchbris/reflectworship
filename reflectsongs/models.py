@@ -96,7 +96,7 @@ class Song(ModelBase):
     )
 
     copyright_info = models.CharField(
-        max_length=200,
+        max_length=300,
         blank=True,
         null=True,
     )
