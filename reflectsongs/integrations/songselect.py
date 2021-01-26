@@ -32,6 +32,7 @@ from urllib.request import HTTPCookieProcessor, URLError, build_opener
 from bs4 import BeautifulSoup, NavigableString
 
 from reflectsongs.models import Theme
+from reflectsongs.utils import grab_songselect_video
 
 USER_AGENTS = [
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) '
@@ -128,7 +129,7 @@ class SongSelectImporter(object):
             try:
                 lyrics_page = BeautifulSoup(
                     self.opener.open(BASE_URL + lyrics_link['href']).read(), 'lxml')
-            except (TypeError, URLError):
+            except (TypeError, URLError, KeyError):
                 logger.exception('Could not get lyrics from SongSelect')
                 return None
         else:
@@ -177,19 +178,25 @@ class SongSelectImporter(object):
         return songdata
 
     def sync_song(self, song):
+        # Get public data
+        if not song.youtube_url:
+            video_url = grab_songselect_video(song.songselect_url)
+            if video_url:
+                logger.info(f'Got video for {song}')
+                song.youtube_url = video_url
         songdata = self.get_songdata(song.ccli_number)
         if not songdata:
-            logger.warning(f'No song data for {song}')
-            return
-        for themename in songdata.get('topics', []):
-            theme, created = Theme.objects.get_or_create(name=themename)
-            if created:
-                logger.info(f'Added theme: {theme}')
-            song.themes.add(theme)
-        copyright_info = songdata.get('copyright')
-        if copyright_info:
-            song.copyright_info = copyright_info
-        lyrics = songdata.get('lyrics')
-        if lyrics:
-            song.lyrics = lyrics
+            logger.warning(f'No extended song data for {song}')
+        else:
+            for themename in songdata.get('topics', []):
+                theme, created = Theme.objects.get_or_create(name=themename)
+                if created:
+                    logger.info(f'Added theme: {theme}')
+                song.themes.add(theme)
+            copyright_info = songdata.get('copyright')
+            if copyright_info:
+                song.copyright_info = copyright_info
+            lyrics = songdata.get('lyrics')
+            if lyrics:
+                song.lyrics = lyrics
         song.save()
