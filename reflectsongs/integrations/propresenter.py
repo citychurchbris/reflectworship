@@ -34,13 +34,13 @@ class ProPresenterPlaylistImporter(object):
         meta, response = dbx.files_download(playlist_location)
         playlist_xml = response.content
         playlists = self._get_playlists(playlist_xml)
-        return self._process_playlists(playlists, site)
+        return playlists
 
     def get_playlists_from_file(self, site, filename):
         with open(filename) as plfile:
             playlist_xml = plfile.read().encode('utf-8')
         playlists = self._get_playlists(playlist_xml)
-        return self._process_playlists(playlists, site)
+        return playlists
 
     def _get_playlists(self, playlist_xml):
         xmlparser = etree.XMLParser(
@@ -82,6 +82,7 @@ class ProPresenterPlaylistImporter(object):
             )
             data.append({
                 'date': sunday.date(),
+                'modified': pl.attrib['modifiedDate'],
                 'uid': pl.attrib['UUID'],
                 'name': pl.attrib['displayName'].strip(),
                 'songs': song_names,
@@ -89,7 +90,7 @@ class ProPresenterPlaylistImporter(object):
         data.sort(key=lambda x: x['date'])
         return data
 
-    def _process_playlists(self, playlists, site):
+    def process_playlists(self, playlists, site):
         added_songs = []
         today = timezone.now().date()
         for playlist in playlists:
