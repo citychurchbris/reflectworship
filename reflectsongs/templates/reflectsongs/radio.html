@@ -6,6 +6,7 @@
   integrity="sha512-HwmeTRPtX4IwZhPJINKNQQ/szpRFWGFk9Cv5JTLTEENcM6Kq6VD/5GKRSZJ37CHzYaS8dK1CfsNk9MXLDm/dLQ==" crossorigin="anonymous">
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-youtube/2.6.1/Youtube.min.js" integrity="sha512-mF+XuiEvJq707N/B9Fm/fI2wgMcWuFLsoztIp0UzEKgHCZgczbYpO2+Vq2TEi0LmE4crVj2r8AYru7X5QjVotw==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/videojs-playlist@4.3.1/dist/videojs-playlist.min.js" integrity="sha256-9SaTQgEH5mVWnqixYTM3cjyN8zbUTx/UmldDVFYLU70=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.11.5/video-js.min.css" integrity="sha512-+krGgE9EwStC6GBtdEVdolP3uGa4ZiPGLxq6S4lY4R2eLK0/+1EJND+7llLQ+TBpt4/6vu4RWP6g8r60/JJNHQ==" crossorigin="anonymous" />
 {% endblock %}
 
@@ -21,17 +22,50 @@
 
     <h2>{{ song }}</h2>
 
-    <video id="video" class="video-js vjs-fluid" controls
-    data-setup='{ "techOrder": ["youtube"], "sources": [
-      { "type": "video/youtube", "src": "{{ song.youtube_url }}"}
-    ] }'
+    <video id="playlist" class="video-js vjs-fluid" controls
+    data-setup='{}'
     >
+
 
   </div>
 </div>
 
 <script>
-//var player = videojs('video');
+var player = videojs('playlist');
+player.playlist([{
+  sources: [{
+    src: '{{ song.youtube_url }}',
+    type: 'video/youtube'
+  }],
+  //poster: 'http://media.w3.org/2010/05/sintel/poster.png'
+}, {
+  sources: [{
+    src: '{{ song.youtube_url }}',
+    type: 'video/youtube'
+  }],
+  //poster: 'http://media.w3.org/2010/05/bunny/poster.png'
+}, {
+  sources: [{
+    src: 'http://vjs.zencdn.net/v/oceans.mp4',
+    type: 'video/mp4'
+  }],
+  //poster: 'http://www.videojs.com/img/poster.jpg'
+}, {
+  sources: [{
+    src: 'http://media.w3.org/2010/05/bunny/movie.mp4',
+    type: 'video/mp4'
+  }],
+  //poster: 'http://media.w3.org/2010/05/bunny/poster.png'
+}, {
+  sources: [{
+    src: 'http://media.w3.org/2010/05/video/movie_300.mp4',
+    type: 'video/mp4'
+  }],
+  //poster: 'http://media.w3.org/2010/05/video/poster.png'
+}]);
+
+// Play through the playlist automatically.
+player.playlist.autoadvance(0);
 
 </script>
 
