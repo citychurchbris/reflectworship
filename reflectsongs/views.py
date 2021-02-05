@@ -346,3 +346,16 @@ class Words(View):
             'reflectsongs/words.html',
             context=context,
         )
+
+class Radio(View):
+
+    def get(self, request):
+        topsongs = get_top_songs(months=12)
+        context = {
+            'song': topsongs[0],
+        }
+        return render(
+            request,
+            'reflectsongs/radio.html',
+            context=context,
+        )

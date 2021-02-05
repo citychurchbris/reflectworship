@@ -1,0 +1,39 @@
+{% extends 'reflectsongs/base.html' %}
+
+{% block head %}
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.11.5/video.min.js"
+  integrity="sha512-HwmeTRPtX4IwZhPJINKNQQ/szpRFWGFk9Cv5JTLTEENcM6Kq6VD/5GKRSZJ37CHzYaS8dK1CfsNk9MXLDm/dLQ==" crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-youtube/2.6.1/Youtube.min.js" integrity="sha512-mF+XuiEvJq707N/B9Fm/fI2wgMcWuFLsoztIp0UzEKgHCZgczbYpO2+Vq2TEi0LmE4crVj2r8AYru7X5QjVotw==" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.11.5/video-js.min.css" integrity="sha512-+krGgE9EwStC6GBtdEVdolP3uGa4ZiPGLxq6S4lY4R2eLK0/+1EJND+7llLQ+TBpt4/6vu4RWP6g8r60/JJNHQ==" crossorigin="anonymous" />
+{% endblock %}
+
+{% block title %}Radio{% endblock %}
+{% block content %}
+
+<div class="row">
+  <div class="col-sm-12 col-md-6">
+
+    <h1>
+      Radio
+    </h1>
+
+    <h2>{{ song }}</h2>
+
+    <video id="video" class="video-js vjs-fluid" controls
+    data-setup='{ "techOrder": ["youtube"], "sources": [
+      { "type": "video/youtube", "src": "{{ song.youtube_url }}"}
+    ] }'
+    >
+
+  </div>
+</div>
+
+<script>
+//var player = videojs('video');
+
+</script>
+
+
+{% endblock %}
