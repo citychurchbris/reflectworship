@@ -20,8 +20,6 @@
       Radio
     </h1>
 
-    <h2>{{ song }}</h2>
-
     <video id="playlist" class="video-js vjs-fluid" controls
     data-setup='{}'
     >
@@ -32,37 +30,17 @@
 
 <script>
 var player = videojs('playlist');
-player.playlist([{
+var songs = [];
+{% for song in songs %}
+songs.push({
   sources: [{
-    src: '{{ song.youtube_url }}',
+    src: '{{ song.youtube_url.strip }}',
     type: 'video/youtube'
-  }],
-  //poster: 'http://media.w3.org/2010/05/sintel/poster.png'
-}, {
-  sources: [{
-    src: '{{ song.youtube_url }}',
-    type: 'video/youtube'
-  }],
-  //poster: 'http://media.w3.org/2010/05/bunny/poster.png'
-}, {
-  sources: [{
-    src: 'http://vjs.zencdn.net/v/oceans.mp4',
-    type: 'video/mp4'
-  }],
-  //poster: 'http://www.videojs.com/img/poster.jpg'
-}, {
-  sources: [{
-    src: 'http://media.w3.org/2010/05/bunny/movie.mp4',
-    type: 'video/mp4'
-  }],
-  //poster: 'http://media.w3.org/2010/05/bunny/poster.png'
-}, {
-  sources: [{
-    src: 'http://media.w3.org/2010/05/video/movie_300.mp4',
-    type: 'video/mp4'
-  }],
-  //poster: 'http://media.w3.org/2010/05/video/poster.png'
-}]);
+  }]
+});
+{% endfor %}
+
+player.playlist(songs);
 
 // Play through the playlist automatically.
 player.playlist.autoadvance(0);

@@ -352,7 +352,7 @@ class Radio(View):
     def get(self, request):
         topsongs = get_top_songs(months=12)
         context = {
-            'song': topsongs[0],
+            'songs': [x for x in topsongs if x.youtube_url ],
         }
         return render(
             request,
