@@ -1,5 +1,6 @@
 import datetime
 from enum import Enum
+from random import shuffle
 
 from django.db import connection
 from django.db.models import Count, Max, Min, Q
@@ -351,8 +352,11 @@ class Radio(View):
 
     def get(self, request):
         topsongs = get_top_songs(months=12)
+        songs = [x for x in topsongs if x.youtube_url ]
+        shuffle(songs)
+
         context = {
-            'songs': [x for x in topsongs if x.youtube_url ],
+            'songs': songs[:10],
         }
         return render(
             request,
