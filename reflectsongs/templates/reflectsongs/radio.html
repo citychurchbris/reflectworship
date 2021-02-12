@@ -22,8 +22,20 @@
       Reflect Radio
     </h1>
 
-    <video id="playlist" class="video-js vjs-fluid" controls
-            data-setup='{}'>
+    <div id="player" class="card">
+      <div class="card-body">
+
+        <div id="video">
+          <video id="playlist" class="video-js vjs-fluid" controls
+                  data-setup='{}'>
+                  Hello
+        </div>
+        <div class="buttons mt-3">
+          <a class="btn btn-primary btn-sm prev float-left" href="#">prev</a>
+          <a class="btn btn-primary btn-sm next float-right" href="#">next</a>
+        </div>
+    </div>
+  </div>
 
   </div>
   <div class="col-sm-12 col-md-6">
@@ -36,8 +48,8 @@
           <b>{{ song }}</b>
           {% if song.authors %}<small>- {{ song.authors }}</small>{% endif %}
           <br />
-          <a class="btn btn-primary play" href="#">play</a>
-          <a class="btn btn-primary details" href="{% url 'song-view' song.slug %}" target="_blank">details</a>
+          <a class="btn btn-primary btn-sm play" href="#">play</a>
+          <a class="btn btn-primary btn-sm details" href="{% url 'song-view' song.slug %}" target="_blank">details</a>
         </li>
         {% endfor %}
     </ul>
@@ -67,6 +79,15 @@ $('li.song a.play').each(function(ind, item) {
     player.play();
     return false;
   });
+});
+
+$('#player a.next').on('click', function() {
+  player.playlist.next();
+  player.play();
+});
+$('#player a.prev').on('click', function() {
+  player.playlist.previous();
+  player.play();
 });
 
 </script>
