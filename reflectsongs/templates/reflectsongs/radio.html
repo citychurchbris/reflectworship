@@ -22,7 +22,7 @@
       Reflect Radio
     </h1>
 
-    <div id="player" class="card">
+    <div id="player" class="card mb-3">
       <div class="card-body">
 
         <div id="video">
@@ -30,7 +30,6 @@
                   playsinline
                   controls
                   data-setup='{}'>
-                  Hello
         </div>
         <div class="buttons mt-3">
           <a class="btn btn-primary btn-sm prev float-left" href="#">prev</a>
@@ -42,7 +41,9 @@
   </div>
   <div class="col-sm-12 col-md-6">
     <p>
-      A random playlist of the most popular songs sung over the past 12 months.
+      A random playlist of the
+      <a href="{% url 'song-list' %}?range=12m">
+      most popular songs</a> sung over the past 12 months.
     </p>
     <ul class="list-group mt-3">
       {% for song in songs %}
