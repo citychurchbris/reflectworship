@@ -47,11 +47,13 @@
     <ul class="list-group mt-3">
       {% for song in songs %}
       <li class="list-group-item song">
+        <div class="buttons float-right">
+        <a class="btn btn-light btn-sm play" href="#">play</a>
+        <a class="btn btn-light btn-sm details" href="{% url 'song-view' song.slug %}" target="_blank">details</a>
+        </div>
           <b>{{ song }}</b>
-          {% if song.authors %}<small>- {{ song.authors }}</small>{% endif %}
+          {% if song.authors %}<br /><small>{{ song.authors }}</small>{% endif %}
           <br />
-          <a class="btn btn-primary btn-sm play" href="#">play</a>
-          <a class="btn btn-primary btn-sm details" href="{% url 'song-view' song.slug %}" target="_blank">details</a>
         </li>
         {% endfor %}
     </ul>
@@ -75,6 +77,7 @@ player.playlist(songs);
 // Play through the playlist automatically.
 player.playlist.autoadvance(0);
 
+// Set up individual play buttons
 $('li.song a.play').each(function(ind, item) {
   $(item).on('click', function() {
     player.playlist.currentItem(ind);
@@ -83,6 +86,7 @@ $('li.song a.play').each(function(ind, item) {
   });
 });
 
+// next/prev controls
 $('#player a.next').on('click', function() {
   player.playlist.next();
   player.play();
@@ -90,6 +94,13 @@ $('#player a.next').on('click', function() {
 $('#player a.prev').on('click', function() {
   player.playlist.previous();
   player.play();
+});
+
+// Highlight active item
+player.on('playlistitem', function(event, item) {
+  var id = item.playlistItemId_;
+  $('li.song').removeClass('active');
+  $('li.song:nth-child(' + id + ')').addClass('active');
 });
 
 </script>
