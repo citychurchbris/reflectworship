@@ -91,10 +91,12 @@ $('li.song a.play').each(function(ind, item) {
 $('#player a.next').on('click', function() {
   player.playlist.next();
   player.play();
+  return false;
 });
 $('#player a.prev').on('click', function() {
   player.playlist.previous();
   player.play();
+  return false;
 });
 
 // Highlight active item
