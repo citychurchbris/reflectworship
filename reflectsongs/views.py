@@ -352,11 +352,11 @@ class Radio(View):
 
     def get(self, request):
         topsongs = get_top_songs(months=12)
-        songs = [x for x in topsongs if x.youtube_url ]
+        songs = [x for x in topsongs if x.youtube_url ][:100]
         shuffle(songs)
 
         context = {
-            'songs': songs[:10],
+            'songs': songs[:12],
         }
         return render(
             request,
