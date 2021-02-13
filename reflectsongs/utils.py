@@ -29,10 +29,12 @@ def yt_embed(url):
     """
     ytid = yt_url_to_id(url)
     return format_html(
-        '<iframe width="560" height="315" '
+        '<div class="embed-responsive embed-responsive-16by9">'
+        '<iframe width="560" height="315" class="embed-responsive-item" '
         'src="https://www.youtube.com/embed/{ytid}" frameborder="0" '
         'allow="encrypted-media; picture-in-picture" allowfullscreen>'
-        '</iframe>',
+        '</iframe>'
+        '</div>',
         ytid=ytid,
     )
 
