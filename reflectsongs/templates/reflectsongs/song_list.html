@@ -39,6 +39,13 @@
       <span class="badge badge-pill badge-success">{{ badge }}</span>
       {% endfor %}
       <span class="badge badge-secondary float-right">{{ song.setlist_count }} plays</span>
+      {% if request.GET.video %}
+        {% if song.youtube_url %}
+          <div style="width: 250px;">
+            {{ song.embed_code }}
+          </div>
+        {% endif %}
+      {% endif %}
   </li>
   {% endfor %}
 </ul>
