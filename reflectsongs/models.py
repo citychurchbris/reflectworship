@@ -6,7 +6,7 @@ from django.utils import formats, timezone
 from django.utils.translation import gettext as _
 
 from dateutil.relativedelta import relativedelta
-
+from reflectsongs.utils import yt_embed
 from reflectsongs.utils import unique_slugify, url_to_link, yt_image
 
 SONGSELECT_BASE_URL = 'https://songselect.ccli.com/Songs/'
@@ -149,6 +149,11 @@ class Song(ModelBase):
         null=True,
         blank=True,
     )
+
+    @property
+    def embed_code(self):
+        if self.youtube_url:
+            return yt_embed(self.youtube_url)
 
     @property
     def badges(self):
