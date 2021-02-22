@@ -47,6 +47,10 @@
             <a class="nav-link {% navactive request 'site-list' %}"
                href="{% url 'site-list' %}">Sites</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link {% navactive request 'radio' %}"
+               href="{% url 'radio' %}">Radio</a>
+          </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" action="{% url 'search' %}">
           <input class="form-control mr-sm-2" type="search"
