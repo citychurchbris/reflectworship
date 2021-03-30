@@ -209,10 +209,10 @@ class Song(ModelBase):
     def get_absolute_url(self):
         return reverse('song-view', args=(self.slug, ))
 
-    def save(self, **kwargs):
-        unique_slugify(self, self.title)
-        super().save(**kwargs)
-
+    @property
+    def youtube_url_nocookie(self):
+        if self.youtube_url:
+            return self.youtube_url.replace('youtube.com', 'youtube-nocookie.com').strip()
 
 class ChordResource(ModelBase):
     """ Represents a chord download (sheet music) """

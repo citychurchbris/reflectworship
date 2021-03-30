@@ -31,7 +31,7 @@ def yt_embed(url):
     return format_html(
         '<div class="embed-responsive embed-responsive-16by9">'
         '<iframe width="560" height="315" class="embed-responsive-item" '
-        'src="https://www.youtube.com/embed/{ytid}" frameborder="0" '
+        'src="https://www.youtube-nocookie.com/embed/{ytid}" frameborder="0" '
         'allow="encrypted-media; picture-in-picture" allowfullscreen>'
         '</iframe>'
         '</div>',

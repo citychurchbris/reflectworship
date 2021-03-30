@@ -62,12 +62,15 @@
 </div>
 
 <script>
-var player = videojs('playlist');
+var player = videojs(
+  'playlist',
+  { nativeControlsForTouch: true, youtube: {enablePrivacyEnhancedMode: true }}
+);
 var songs = [];
 {% for song in songs %}
 songs.push({
   sources: [{
-    src: '{{ song.youtube_url.strip }}',
+    src: '{{ song.youtube_url_nocookie }}',
     type: 'video/youtube'
   }]
 });
