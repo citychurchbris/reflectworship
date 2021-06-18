@@ -214,6 +214,11 @@ class Song(ModelBase):
         if self.youtube_url:
             return self.youtube_url.replace('youtube.com', 'youtube-nocookie.com').strip()
 
+    def save(self, **kwargs):
+        unique_slugify(self, self.name)
+        super().save(**kwargs)
+
+
 class ChordResource(ModelBase):
     """ Represents a chord download (sheet music) """
 
