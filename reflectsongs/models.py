@@ -215,7 +215,7 @@ class Song(ModelBase):
             return self.youtube_url.replace('youtube.com', 'youtube-nocookie.com').strip()
 
     def save(self, **kwargs):
-        unique_slugify(self, self.name)
+        unique_slugify(self, self.title)
         super().save(**kwargs)
 
 
