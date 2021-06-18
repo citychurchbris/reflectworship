@@ -15,7 +15,7 @@ lxml==4.6.3
 psycopg2-binary==2.8.2
 python-dateutil==2.8.0
 pytz==2019.1
-requests
+requests==2.25.1
 s3transfer==0.4.2
 six==1.12.0
 soupsieve==1.9.1
