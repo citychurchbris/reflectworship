@@ -12,7 +12,7 @@ urlpatterns = [
     path('robots.txt', TemplateView.as_view(
         template_name="reflectsongs/robots.txt")),
 
-    path('', HomeView.as_view()),
+    path('', HomeView.as_view(), name='index'),
 
     # Setlists
     path('setlists/<pk>/', SetlistView.as_view(), name='setlist-view'),
